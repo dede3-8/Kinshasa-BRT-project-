@@ -1,0 +1,2331 @@
+\documentclass{article}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,235mm},
+ left=30mm,
+ top=35mm,
+ right=30mm
+ }
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{imakeidx}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{listings}
+ \usepackage{setspace}
+ \usepackage[official]{eurosym}
+ \usepackage[dvipsnames]{xcolor}
+ \usepackage{hyperref} 
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,
+    citecolor=black,      
+    urlcolor=cyan,
+    pdfpagemode=FullScreen,
+    }
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}   
+    
+    
+\makeindex
+\begin{document}
+\setlength{\parindent}{0pt}
+\begin{titlepage}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\center
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm, height=6cm]{logopolimi}
+\end{figure}	
+\textsc{\Large dynamics, control and diagnostics of \\ground transportation systems}\\[0.5cm] 
+
+\HRule\\[0.2cm]
+\center
+{\LARGE\bfseries Project for a public transportation network\\
+in Kinshasa (DRC)}\\[0.7cm]
+\HRule\\[0.5cm]
+	\begin{minipage}{0.4\textwidth}
+			\large
+			\begin{flushleft}
+			\textit{Authors}\\
+			\textsc{marco bennici\\
+			davide floridi\\
+			davide libera\\
+			lorenzo pallone\\
+			giovanni reposo} 
+			\end{flushleft}
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushright}
+			\large
+			\textit{Supervisors}\\
+			\textsc{Prof. Collina Andrea\\
+			Ing. Castellini Federico} 
+		 \end{flushright}
+	\end{minipage}
+
+\renewcommand*\contentsname{Summary}
+\
+\bigskip
+\bigskip
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm, height=7cm]{logo}
+\end{figure}
+\end{titlepage}
+\newpage
+\
+\newpage
+\begin{abstract}
+Urban mobility is one of the most critical aspects of our time, and our decisions can make huge impacts, positive or negative, on worldwide problems like climate change and pollution in general, this is particularly important in developing countries where public transportation is nonexistant  or insufficient for the population needs.\\
+The aim of this project is to develop a mass rapid transit system in one of the most populated cities in the world, Kinshasa, located in the Democratic Republic of Congo.\\
+Every day in this city millions of people travel in the congestion with the so called “informal transit”, on mostly unpaved roads that become nearly impracticable during wet weather conditions. The idea developed in this project to improve the public transportation network with a BRT (bus rapid transit) and, in addition to it, a light bus circular line in the city centre. The idea of a BRT system has been suggested by similar projects in many cities in developing countries, especially in South America and Africa.\\
+An alternative solution is also proposed, this including the renovation of urban railways, to built a suburban rail network, like the ones that move millions of people every day in the most developed countries. These two solutions are compared to see what is the most suitable for the city.\\
+The main part of this project is the dynamical modelling and simulation: both solutions are analyzed in this project in terms of longitudinal dynamics of the vehicles, the BRT vehicles are further studied in terms of vertical dynamics and comfort, and also analyzing the impacts of vehicles on road vibrations.\\
+Also, a part of service planning of both scenarios is included in this project, including the dimensioning of the fleet. Then, with the figures obtained an economic and environmental analysis regarding the BRT is proposed, comparing the use of ICE buses and electrical buses to see what is  the most suitable solution for the city. Then, a brief section regarding signalling and one about road damage are included.\\
+The belief is that a good transportation network will have a huge impact on the life of the inhabitants of Kinshasa, not only in terms of a better environment, but also leading to more job opportunities and thus improving the quality of life of many people.
+\end{abstract}
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\section{Introduction}
+The aim of this report is to outline a feasibility study for a Bus Rapid Transit (BRT) system in comparison with a suburban rail line in the Kinshasa, the capital city of the Democratic Republic of Congo (DRC).\\
+DRC was chosen as the location for the project, since it is one of the poorest and least developed countries in Africa, even among other sub-Saharan states; despite that the population grows by more than 3\%/annum, which is one of the highest rates in the world \cite{worldbank0}. In the Democratic Republic of Congo more than 73\% of the population lives with less than 1,90\$ per day and the GDP pro capita is about one-third of the average of sub-Saharan Africa.\\
+The bad economic performance of DRC also impacts its transport infrastructure: the reasons for the bad state of Africa and DRC infrastructure date back to the colonial age. Colonialism was about the exploitation of natural resources, thus colonial government administration was typically settled in a capital city, often a port, and had little concern for inland passenger transport. Only the links between the port and the material source were of prime interest and the result was that transport networks were extensive in linking ports with distant sources rather than intensive in giving good network coverage to the whole of the territory. Additionally, rail development was emphasized, because rail transport was usually believed to have an advantage over other modes for heavy, bulk movements over long distances. Moreover, because speed was not essential, the rail systems were built to modest technical specifications, with the consequence that once roads began to be developed, the railways were not well equipped to compete in the more time-sensitive passenger transport markets.\\
+That also affected urban development. The emphasis on rail rather than road development meant that urban road systems were often inadequate in density, badly constructed, and poorly maintained. Furthermore, the poor management of the state or municipal bus companies, together with attempts to maintain uneconomically low fares without any compensating subsidies, destroyed many of the conventional private bus companies. Eventually, the lack of adequate urban regulatory institutions meant that the informal sector services that emerged were effectively subject only to self-regulation by operators’ associations, which acted primarily in operators’ rather than passengers’ interests \cite{africatransport}.\\
+As a result, the transport system in Kinshasa is totally inadequate at catering for the commuting needs of the population as well as guaranteeing safe and sustainable transport. Over 96\% of CO2 emissions from fossil fuels in DRC come from the transport sector and road mortality is as high as 35 deaths over 100.000 inhabitants per year4. It should now be clear that good quality mass transit is key to ensure equitable, economically and environmentally sustainable travel opportunities in DRC and especially in its 17-million-inhabitants capital city, Kinshasa.\\
+The preliminary study for the deployment of a rapid transit system in Kinshasa is organized as follows. First, an analysis of the social and economic context is performed, followed by a detailed overview on the transport system in Kinshasa and on the existing improvement plans. Second, infrastructure intervention scenarios are defined, and the various transport alternatives are assessed from a dynamical point of view. The results obtained from the vehicle microsimulation is then used for service planning, economic assessment and more detailed infrastructure design. Finally, the environmental impact of the project is briefly analysed and some suggestion on the best technological choice is given \cite{worldbank1}.
+\newpage
+\section{General overview}
+The Democratic Republic of Congo (DRC) is a large country located in the centre of Africa, in the so called Congo Basin, a humid region with the world's second biggest rainforest. It is the second biggest African country (after Algeria) and the fourth one by total population.\\
+The country was a former Belgian colony until 1960, and after a troubled independence became known as Zaire, under the dictator Mobutu Sese Seko. After the overthrown of the dictatorship in 1997 the country was the main theatre of First and the Second Congo War, which were the deadliest conflicts after the second World War.\\
+In the first two decades of the 2000s several ethnical conflicts arose across the country, in 2018 the last elections where held, not without suspects about the fairness of them.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm, height=8cm]{rdcmap}
+\caption{Map of Democratic Republic of Congo}
+\end{figure}
+
+\subsection{Population}
+In DRC, no census survey has been conducted since 1984. \\
+There are several statistics on the current population of Kinshasa City and of the country, but all of them are based upon numbers of assumptions given by the scarce and corrupt bureaucratic system. \\
+The most accurate estimates of population of the country indicate a total of approximately \textbf{94'360'000} people, and of the city of Kinshasa about \textbf{15'600'000} people.
+According to that estimates Kinshasa is the most populated city of the continent, but the most impressive figure is the 
+population density: and astonishing value of $ \boldsymbol{26'047\:ab/km^{2}} $.\\
+\newpage
+In the following graphs the population trend of the country and for the city are shown clearly:
+\begin{figure}[H]
+\centering
+\subfloat[RDC \cite{worldometers}]{\includegraphics[width=14cm, height=6cm]{rdcpop}}
+\qquad
+\subfloat[Kinshasa \cite{worldpupulation}]{\includegraphics[width=14cm, height=6cm]{population}}
+\caption{Population data}
+\end{figure}
+
+It can be clearly seen that the total population is expected to keep on growing a lot in the next decade, but the growth rate is forecast to start decreasing from 2025.
+\newpage
+\subsection{Socioeconomic conditions}
+The Democratic Republic of Congo is one of the poorest countries in the world, its GDP per capita is fourth lowest in Africa \cite{gdp} and, in 2018, it was estimated that 73\% of the Congolese population, equaling 60 million people, lived on less than \$1.90 a day. \cite{poverty}\\
+In addition, the Human Capital Index (HCI) of DRC is 0,4, which means that a worker’s productivity is 40\% of what it could be if the worker had had full access to education and health. In other words, the HCI score ranges from zero to one and measures the productivity as a future worker of child born today relative to the benchmark of full health and complete education. As an example, a 0,5 HCI means that if the population had a good education and good health, the country would double the GDP pro capita \cite{HCI}. This happens despite the abundance of natural resources in the country, like cobalt ore (it is the world's largest producer),copper and diamonds, because of political instability and wars over raw materials.
+Also diseases like Malaria, Aids, Ebola and lastly Covid-19 played a key role in causing the poverty.
+After the election of the current president in 2018 the political situation has improved slightly.
+\begin{figure}[H]
+\centering
+\subfloat[]{\includegraphics[width=7cm, height=4cm]{rdc}}
+\qquad
+\subfloat[]{\includegraphics[width=7cm, height=4cm]{kin}}
+\caption{GDP \cite{japan}}
+\end{figure}
+GDP by sector:
+\begin{figure}[H]
+\centering
+\subfloat[]{\includegraphics[width=7cm, height=4cm]{rdc1}}
+\qquad
+\subfloat[]{\includegraphics[width=7cm, height=4cm]{kin1}}
+\caption{GDP by sector \cite{japan}}
+\end{figure}
+As expected the main sector in Kinshasa is the tertiary (especially transport and telecommunications), while in the rest of the country the primary is the predominant (because of agricolture and transport).
+\begin{figure}[H]
+\centering
+\subfloat[]{\includegraphics[width=14cm, height=4cm]{sex}}
+\qquad
+\subfloat[]{\includegraphics[width=12cm, height=4cm]{age}}
+\caption{Employment by sex and age \cite{japan}}
+\end{figure}
+\newpage
+\section{State of the art}
+\subsection{Current situation}
+\subsubsection{Roads}
+In African cities urban transport is largely road based, but the road network has many problems: \cite{africatransport}
+\begin{itemize}
+\item{in many cases the road network consist of radial routes departing from the city centre, lacking in orbital links;}
+\item{the road network developed before rapid growth personal motorized transport, so it often insufficient for the needs of the population;}
+\item{the fraction of paved roads is too low;}
+\item{infrastructure is poorly mantained;}
+\item{roads poorly managed, especially interesections;}
+\item{very little interest in facilitating public tranportation (lacking of bus lanes, bus stops and other facilites);}
+\end{itemize}
+
+\begin{figure}[H]
+\subfloat[Roads in central Kinshsasa \cite{osm}]{\includegraphics[width=0.5\textwidth, height=5cm]{roads}}
+\qquad
+\subfloat[Pavement type in central Kinshasa \cite{japan}]{\includegraphics[width=0.5\textwidth, height=5cm]{pavementtipe}}
+\caption{Roads in Kinshasa}
+\end{figure}
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=13cm, height=7cm]{roads}
+%\caption{Road network in central Kinshasa \cite{osm}}
+%\end{figure}
+
+Kinshasa has a road network of about 5000 km, but only 500 of it (so approximately 10\%) are paved, this figure makes Kinshasa the city with the least number of paved roads  per square kilometre of every major African city \cite{africatransport}, even though in the central area the percentage of paved roads rises up to 63\% \cite{japan}.\\
+To analyze better the road network the city can be divided in three distinct areas.
+\begin{figure}[H]
+\centering
+\includegraphics[width=13cm, height=8cm]{areas}
+\caption{Main areas of the city \cite{japan}}
+\end{figure}
+\begin{itemize}
+\item{\textbf{Central area:}
+the road network looks systematically well-developed and seems to have a road hierarchy. Also, this area is divided into two categories depending on the functions; namely, the one is the core area such as Gombe, Lingwala, Kinshasa and Barumbu Communes and the other is the fringe area such as the northern parts of Ngiri-ngiri and Kalamu Communes. 
+In the core area, road surface types are mainly paved and the surface conditions are rather better due to good road maintenance. 
+The pipes of water supply buried under road pavement, however, are torn, water stains are on road surface and causes the destruction of roads in many places.  
+On the other hand, the surface types in the fringe area are paved for main roads and unpaved for minor roads. The paved main roads, however, are deteriorated, with a lot of potholes and peeled surface due to insufficient road maintenance.
+\begin{figure}[H]
+\subfloat[Boulevard 30 Juni]{\includegraphics[width=0.5\textwidth, height=4cm]{30juni}}
+\qquad
+\subfloat[Katanga]{\includegraphics[width=0.5\textwidth, height=4cm]{katanga}}
+\caption{Roads in central area \cite{japan}}
+\end{figure}}
+\item{\textbf{Sprawl area:}
+after independence from Belgium, the road network has been developed in disorder without any plan to accommodate the population growth. The area spreads to the periphery of the central area excluding the north and the east area due to the geographical constraints of the Congo River. Also, this area is divided into two categories depending on the terrain; namely, the one is the hilly sprawling area in the south of the central area such as Ngaliema, Selembao, Lemba and Kisenso Communes and the another is the flat one in the South and East of the central area such as Bumbu, Makala, Ngaba, Matete, N’djili and Kimbanseke.\\
+At first glance, the road network in the flat area looks dense and is laid out in a grid; it is, however, a long and narrow grid.                                                                                          The road hierarchy seems to consist of two classes; namely, main and minor roads; also, the intervals of the main roads aren’t arranged suitably. Especially, the main roads in the east-west axis are less, compared with the north-south axis. Moreover, the roads are cut off at many places by rivers and streams.\\
+On the other hand, the road network in the hilly area is developed depending on the topography and is disconnected by valleys and steep slopes. It looks that many small clusters made by minor roads hanging on to a main road which is limited and passes on the ridge of hill. The surface types in the sprawl area are paved for the main roads and unpaved for minor roads, the same as those in the fringe area. The roads in the flat area, however, are often destroyed by rivers and streams or have huge holes in many places and it is difficult to pass through them, even in the dry season. On the other hand, the roads in the hilly area are better than the flat ones. Several main routes, however, are deteriorated, such as the by-pass.
+\begin{figure}[H]
+\subfloat[Boulevard de l'Universitè]{\includegraphics[width=0.5\textwidth, height=4cm]{uni}}
+\qquad
+\subfloat[Boulevard de la Liberation]{\includegraphics[width=0.5\textwidth, height=4cm]{lib}}
+\caption{Roads in sprawl area \cite{japan}}
+\end{figure}}
+\item{\textbf{Rural area:}
+this area basically consists of a ribbon-developed area and small town area. The road network in this area, therefore, is undeveloped and coarse. 
+The surface types in the rural areas are paved for national roads and unpaved for other roads but the surface conditions for other roads are usually bad.
+\begin{figure}[H]
+\subfloat[Boulevard Lumumba]{\includegraphics[width=0.5\textwidth, height=4cm]{lumumba}}
+\qquad
+\subfloat[RN43]{\includegraphics[width=0.5\textwidth, height=4cm]{rn43}}
+\caption{Roads in rural area \cite{japan}}
+\end{figure}}
+\end{itemize}
+\newpage
+\subsubsection{Railways}
+In Africa railways played a huge role in the late 19th and in the early 20th century, during the colonial age. Many lines were built to connect ports to the inland to transport prime materials and other goods that were then shipped to the western world.  
+After decolonization many railways were abandoned and very few were built, leaving Africa with and insufficient network for the needs of its inhabitants. 
+In total there are 70’000 km of railways, 55’000 of which are currently used, apart from South Africa only a small fraction of them is electrified.\\
+\
+The problems of the railway network are: 
+\begin{itemize}
+\item{poor maintenance;}
+\item{very low investements}
+\item{a disconnected and low density network}
+\item{poor management}
+\end{itemize}
+In Kinshasa the railway network is composed of 2 lines, one, which is a short branch to Ndjili airport and the other the line to Kasangulu, on the line to the important port of the city of Matadi. Until 2007 a short branch to Kitambo used to be in service. 
+The lines are all single track, except from Kinshasa East (gare centrale) to Matete which is double track.\\
+Nowadays the only line in operation is the one to Kasangulu, served by only one train per day, and only during weekdays, in the morning Kinshasa gare centrale bound and in the evening returning to the suburbs. The line to Ndjili airport closed in 2015 due to financial problems.\\
+Because the connection to the port this line is also used for cargo, both imported and exported, transporting especially malt, flour, salt and wood.\\
+Techninal data of the line:\\
+
+\begin{tabularx}{1\textwidth} {
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X |}
+ \hline
+ Guage & \textbf{1067 mm} \\
+ \hline
+ Electrification & \textbf{No}\\
+ \hline
+ Axle load & \textbf{15t}\\
+ \hline
+ Daily passenger traffic & \textbf{1600}\\
+ \hline
+ Annual transported cargo volume & \textbf {56'000 tonnes}\\
+ \hline
+ \end{tabularx}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=13cm, height=8cm]{rails}
+\caption{Railway network in central Kinshasa \cite{ORM}}
+\end{figure}
+\subsubsection{Riverboats, Ports and Airports}
+Despite not being located directly on the ocean, Kinshasa has a port located on the banks of the Congo river, used especially for cargo, receiving approximately 3500 TEU\footnote{a TEU is equivalent to a load of maximum 21600 kg} in 2015.
+Particularly important is the Kinshasa:Brazzavile route, across the river Congo, with a cargo handling volume of 371'000 tonnes and over 810'000 per year.\\
+In Kinshasa the are two main airports: N'djili and N'dolo. N'dolo airport is very small compared to the other with 15\% of total aircraft movements and 6\% of total passenger number compared to N'dili airport.
+\begin{figure}[H]
+\centering
+\subfloat[Annual passenger demand for both airports \cite{worldometers}]{\includegraphics[width=12cm, height=5cm]{airpax}}
+\qquad
+\subfloat[Annual cargo volume of both airports \cite{worldpupulation}]{\includegraphics[width=12cm, height=5cm]{aircargo}}
+\caption{Airport data \cite{air}}
+\end{figure}
+
+\subsubsection{Public Road transport network}
+The public road transport can be categorized mainly into 2 modes: buses and taxis.
+The bus network can be divided into 3 types based on the size of the vehicle: large bus, minibus and taxi-bus. The large buses are operated by \textbf{TRANSCO}, a public enterprise, which network consist of 28 urban lines.  
+The minibuses are operated by \textbf{New TransKin}, another public entity, or by private companies or individuals.\\
+Even though it may seem a good service the seat availability is really low, even for African standards, with 6 seats for 1000 people,this leads to overcrowding problems, with buses traveling at 150\% their rated maximum capacity. 
+\cite{africatransport}\\
+\begin{tabularx}{1\textwidth}[c]{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X |}
+\hline
+ & \vskip 0.3mm \textbf{Large bus} & \vskip 0.3mm \hspace{0.8 cm} \textbf{Minibus} \newline \textit{Formal/Informal} \\ [1.6em]
+\noalign{\hrule height 1.2pt}
+ \vskip 1.5mm Fleet size & \vskip 1.5mm 180 & \vskip 1.5mm 54/1200 \\ [3em]
+ \hline
+\vskip 1.5mm Average age & \vskip 1.5mm 2 & \vskip 1.5mm 2/15-20\\ [3em]
+\hline 
+\end{tabularx}
+\begin{figure}[H]
+\subfloat[TRANSCO large bus]{\includegraphics[width=8cm, height=4cm]{bus}}
+\qquad
+\subfloat[New TransKin minibus \newline \textit{ Radio Okapi/Ph. John Bompengo}]{\includegraphics[width=7cm, height=4cm]{minibus}}
+\caption{Typical bus and minibus }
+\end{figure}
+\subsection{Future projects}
+At the moment there are already several proposals for improving the transportation in Kinshasa.\\
+There are mainly two scenarios: the base scenario that incorporates a level of connectivity in principle comparable to that of developed countries, with all facilities maintained in good condition, such a scenario would be out of reach for many countries, which is no doubt why the ambitious targets articulated in many national plans so often go unrealized. For that reason, the model permits the specification of less ambitious alternatives: the pragmatic scenario, which aims for a somewhat lower level of connectivity, with infrastructure maintained in only fair condition. The scenarios are described in more detail below.\\
+\\
+\textbf{National Integrated Transport Development Plan}\\
+\\
+\textbf{PDNIT} (Le Plan Directeur National Intégré des Transports / National Integrated Transport Master 
+Plan) prepared an integrated national transport master plan for the whole of DRC.\\
+The project has 3 phases:
+\begin{enumerate}
+\item analysis of transport integration (data collection and analysis); 
+\item proposal and choice of actions;
+\item development of the master plan and sectoral policy of transports. 
+\end{enumerate}
+The results of Phase 3 of PDNIT were presented in April 2018 inviting relevant government agencies and development partners. CI (Infrastructure Unit of minister of transportation) has approved the reports of the PDNIT from July – September, 2018, and the report has been submitted to MITPR as of March 2019. \\
+The PDNIT study has national and urban components, the urban component has a part for overall  
+policy on urban transport sector for top fifteen large cities with more than 300,000 inhabitants, 
+studies on urbanized area of Kinshasa, and case studies on four cities, Lubumbashi, Kisangani, 
+Bukavu and Matadi, which are representing main Congolese urban areas. \\
+While the Study Area for Kinshasa City of PDNIT is not clearly described in the reports, only the 
+current urbanized area was studied according to the interview to the PDNIT study team. The planning horizon of the PDNIT for Kinshasa City is generally 2030 and 2040; while the first period is divided in to three parts: 2018-2020, 2021-2025 and 2026-2030.\\
+Five urban transport sector issues are identified by the PDNIT, these are: 
+\begin{enumerate}
+\item insufficient supply of urban infrastructure to be restructured, maintained and developed; 
+\item cub-standard public transport services to be structured and reinforced; 
+\item current unsatisfied and constrained travel demand to be served by transport modes; 
+\item inefficient transport organizations to be restructured in line with urban development; 
+\item governance dysfunction requiring more local and more integrated management of transport. 
+\end{enumerate}
+Two types of objectives, strategic and operational, have been set.\\
+The six strategic objectives are: 
+\begin{enumerate}
+\item respond to travel demand of rapidly growing urban populations through the provision of infrastructure and services;
+\item develop urban transport systems which support sustainable and integrated urban development; 
+\item improve accessibility to employment and public services and increase social and territorial inclusion; 
+\item improve urban mobility under a controlled environmental and carbon footprint; 
+\item strengthen institutional, legal and regulatory frameworks for urban transport in order to include mobility as a key factor in decision-making processes; 
+\item formulate urban transport policy consistent with national level policy considering the specific needs of each city. \end{enumerate}
+The eight operational objectives of the PDNIT are: 
+\begin{enumerate}
+\item prioritize, restructure and complete the urban road network in order to improve reliability and support urban development; 
+\item reinforce maintenance of urban roads to be served; 
+\item strengthen the capacity of traffic flow management in order to smooth traffic and optimize network usage; 
+\item structure supply of urban feeder public transport services by supporting drivers and owners; 
+\item reinforce or create an urban public transport system for local needs and contexts; 
+\item organize multi-modal transport hubs (or “Les pôles d’échanges”) to be integrated into the urban environment; 
+\item provide urban planning and project implementation tools; 
+\item organize key persons to enable them to effectively implement urban transport policy. 
+\end{enumerate}
+\begin{figure}[H]
+{\centering
+\subfloat[Proposed road network and intersection \\ improvement]{\includegraphics[width=7cm, height=4cm]{pdnit1}}
+\qquad
+\subfloat[Proposed public transport network and \\ multimodal hubs]{\includegraphics[width=7cm, height=4cm]{pdnit2}}
+\caption{PDNIT proposals}\par}
+\end{figure}
+\textbf{Urban development plan in Kinshasa city (SOSAK)}\\
+\\
+Due to the increasing number of population in the metropolis of Kinshasa, it was stated the SOSAK (Schéma d'Orientation Stratégique de l'Agglomération de Kinshasa / Strategic Orientation Scheme for the Kinshasa Metropolitan Area) that has the following objectives:\\
+\begin{itemize}
+\item provision of future economic and demographic situation;
+\item provision of economic development and spatial development;
+\item to balance social environment with residents;
+\item to define urban facilities and services.
+\end{itemize}
+Based on the results of the current condition, in terms of urbanization, former urban planning, current population and current situation of infrastructures, SOSAK analyses the potentiality of future development and proposes development scenarios.\\
+SOSAK proposes eight development orientations for the future development of Kinshasa City:
+\begin{enumerate}
+\item expansion of the traffic network according to the extension of urban development;
+\item development of communal and multimodal transport;
+\item resolution of the congestion in the centre of the city and creation of other urban cores;
+\item planning with forecasting for extended urban areas;
+\item upgrading urban facilities in poorly equipped quarters;
+\item development of infrastructure and facilities;
+\item symbiosis with the natural environment;
+\item promotion of city as art and culture.
+\end{enumerate}
+\textbf{Transport sector}\\
+Transport sector of SOSAK refers to the “Urban Transport Study of Kinshasa” (Etude du Plan de mobilité de Kinshasa) prepared by Transurb Technirail, STRATEC and A.E.C funded by the Belgian Development Agency, CTB and the “Technical Report of Mission on Urban Transport” funded by the World Bank. The proposal of the SOSAK is based on those studies. 
+The proposed urban road network by SOSAK is planned to form a mesh of 2km considering the accessibility to the arterial roads assuming that every resident in urban areas can access to arterial roads with 1km of walking or approximately fifteen minutes of walking. Based on this urban road network, several primary arterial roads are proposed to connect the city centre, industrial areas, universities, airports and river ports. These primary arterial roads include the roads in the city centre to form a grid, ring roads, and two roads to Maluku which are connecting to the proposed bridge to the Republic of Congo. The total length of this road network is 604km, and it is estimated that it costs 3.69 billion USD to be paid until 2030. In addition, 131km of roads which requires 0.42 billion USD is proposed.\\
+In terms of public transport, railway is expected to serve as trunk routes, the existing and abandoned lines to/from Kintambo, Airport and Kimwenza are planned to be modernised for a total length of modernization of 64.1km. The cost for modernization is estimated at 0.54 billion USD, however, there is no plan of additional railway line.\\
+A BRT (Bus Rapid Transit) system is also proposed along arterial roads taking financial constraint into consideration for the short term option. It is also mentioned that it can be converted to a LRT (Light Rail Transit) in the future.
+\begin{figure}[H]
+{\centering
+\subfloat[Proposed road network]{\includegraphics[width=7cm, height=4cm]{sosak1}}
+\qquad
+\subfloat[Proposed public transport network]{\includegraphics[width=7cm, height=4cm]{sosak2}}
+\caption{SOSAK proposals}\par}
+\end{figure}
+\noindent \textbf{Japan International Cooperation Agency}\\
+\\
+In the \textit{Project for urban transport master plan in Kinshasa city} made by the \textit{Japan International Cooperation Agency} different future scenarios are proposed on the time frame 2030-2040: \\ \textbf{do minimum, road intensive \& transport intensive}.
+\begin{itemize}
+\item{\textbf{Do minimum:} current ongoing projects + a minimum investment, improvements in road maintenance.}
+\item{\textbf{Road intensive:} very huge impacts to the road network: arterial roads grid network and circular roads, few BRT lines and modernization of existing railways.}
+\item{\textbf{Transport intensive:} reduction of number of lanes in suburban roads, intensive BRT and semi-BRT, 
+modernization of existing railways and creation of a new railway line along boulevard 30 juni and to south western suburbs.}
+\end{itemize}
+Here we provide more details of the transport intensive scenario, which is the most interesting one and most similar to our vision.\\
+\\
+\textbf{Railways}\\
+\\
+In this scenario two more round trips on the south line (to Kimwenza) are proposed, to obtain a total of 4 round trips daily, this is possible without the need of new locomotives and wagons. Though to obtain a suitable urban rail service at a frequency of 1 train per hour on the section Kinshasa East-Matete two more round-trips are needed, but this is only possible with two new additional trains. The new trains are suggested to be \textit{DMU} (diesel multiple units) to minimize time loss at terminus stations, because with current trains the locomotives need to be replaced at every terminus. \\
+Heavy improvements are suggested to be made to all components of the tracks (rail, sleepers, rail fastening system, ballast). \\ 
+A signalling system currently does not exist on the lines, so it must be introduced. \\
+\\
+\textbf{BRT}\\
+\\
+This scenery includes 6 BRT lines, on the main roads 
+On 6 lanes road a full BRT system is proposed, leaving more than two lanes available for other traffic, on the other hand on 4 lanes (or less) a semi-BRT is proposed, in which in two lanes is given priority to BRT vehicles but are not entirely closed to other traffic. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm, height=8cm]{proposedBRT}
+\caption{New BRT lines and railways}
+\end{figure}
+\noindent \textbf{Other improvements}\\
+\\
+In addition to the BRT new and consolidated conventional bus route are proposed, to serve areas not covered neither by BRT neither the railways.\\
+The road network should be developed in parallel to public transportation to handle the increasing demand, the road network is divided into primary and secondary roads.\\
+The primary roads handle the BRT lines and in general traffic from opposite sides of the city, these roads are divided into ring roads and axis roads, while the secondary roads manage the inter-quartier traffic and connect primary roads.\\
+Also, several improvements have to be made in order to improve safety of road users, especially pedestrian: 
+\begin{itemize}
+\item{Improving road geometry, especially at intersections.}
+\item{Adding more traffic lights.}
+\item{Improving and adding new pedestrian friendly infrastructure (crossings, sidewalks).}
+ \end{itemize}
+ 
+ \begin{figure}[H]
+\centering
+\includegraphics[width=14cm, height=10cm]{newroads}
+\caption{Improved road network}
+\end{figure} 
+ \newpage
+\section{Route definition} %%%%section 4
+In this chapter the two future scenarios to improve public transportation network of Kinshasa are proposed and described in detail.
+\subsection{Scenario 1: BRT + Minibus}
+In the preferred scenario the backbone of the network are the 2 Bus rapid transit system lines (BRT), \textcolor{Red} {Line 1} and \textcolor{ForestGreen} {Line 2}, that connect the suburbs, which are mainly residential areas, to the centre of city. These lines will provide a fast, high capacity and reliable solution to allow thousands of residents of the suburbs to travel in a reasonable amount of time to the city centre, where most of the job opportunities are located. These lines will run on the main roads of the city, which are all paved.\\
+In addition to that a circular line is also included, that runs at the boundaries of the city centre, this being operated by standard buses mainly because of the narrow streets the line runs along. This line will be useful to cover more densely the areas with more points of attraction and will also allow trips from opposite sides of city, without passing directly through the city centre. 
+\subsubsection{Reference path}
+\textbf{BRT}\\
+\textcolor{Red}{\textbf{Line 1: Ndjili airport-Kitambo}}\\
+This line will be the most important of the whole network, this route is similar to the Line E1 hypothesized by the japanese project; it will connect the main airport located in the eastern suburbs to Kitambo municipality crossing the city centre along Boulevard 30 Juni. This line it will be 30.1km long with 35 stops, so one every 860m on average, and will run on the following roads:
+\begin{itemize}
+\item Boulevard Lumumba: 4/6 lanes, paved and in fair conditions;
+\item Avenue du Peuple: 2 lanes, paved, acceptable conditions;
+\item Boulevard 30 juin: 8 lanes, paved, good conditions with horizontal signals;
+\item Avenue Colonel Mondjiba: 8 lanes, paved, good conditions. 
+\end{itemize}
+\newpage
+The line crosses and serves the following municipalities of Kinshasa:\\
+ 
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X |}
+ \hline
+\textbf{ Municipality} & \textbf{Population} & \textbf{Pop. density} \newline $(ab/km^{2})$ & \textbf{Main areas} & \textbf{Main facilities}\\
+\noalign{\hrule height 1.2pt}
+ Nsele &140 929 &157& Rural &Ndjili airport\\
+  \hline 
+ Masina & 485 167 &6961& Residential/  Rural & Marchè é Della Liberte (biggest market in city)\\  
+ \hline
+ Kimabanseke & 946 372&3980&Residential&-\\
+ \hline
+ Ndjili & 442 138 & 38 764&Residential&-\\
+ \hline
+Matete&268 781&55 078 &Residential & Several schools\\
+\hline
+Limete &375 726 &5558 &Mainly industrial &Several industries and port facilities\\
+\hline
+Lemba &349 838 &14 761 &Residential &Kinshasa university\\
+\hline
+Kinshasa &164 857 &57 441 &Commercial/  Residential & Stadium, Ndolo Airport  \\
+\hline
+Gombe &92 373 &3149 &Commercial&Political and economic centre of the city, ferry to Brazzaville, central hospital\\
+\hline
+Kitambo&106 772&39 254&Residential&-\\ 
+\hline
+\end{tabularx}
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=8cm]{brt1}
+\caption{Path of BRT Line 1}
+\end{figure} 
+\newpage
+\noindent\textcolor{ForestGreen}{\textbf{Line 2: Binza UPN-Kinshasa East (gare centrale)}}\\
+This line runs mainly in the west side on the city, connecting high populated municipalities to the city centre, overlapping to line 1 along boulevard 30 june, the most congested part of the city, it will be 16.4km long with 23 stops, so one every 710m on average, and will run on the following roads:
+\begin{itemize}
+\item Avenue de la liberation: 4 lanes, paved, in good condition;
+\item Boulevard 30 juin: 8 lanes, paved, good conditions with horizontal signals.
+\end{itemize}
+The line crosses the following municipalities of Kinshasa:\\
+\\
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X |}
+ \hline
+\textbf{ Municipality} & \textbf{Population} & \textbf{Pop. density} \newline $(ab/km^{2})$ & \textbf{Main areas} & \textbf{Main facilities}\\
+\noalign{\hrule height 1.2pt}
+ Selembao &335 581 &14 477 & Residential & Université pédagogique nationale\\
+  \hline 
+ Bumbu & 329 224 & 62 120& Residential&-\\  
+ \hline
+ Ngiri-Ngiri & 174 841 &51 424&Residential&-\\
+ \hline
+ Ndjili & 442 138 & 38 764&Residential&-\\
+ \hline
+Kasa-Vubu &157 320 &31 152 &Commercial/ Residential &Palais du peuple\\
+\hline
+Lingwala &94 635 &32 859 &Commercial/ Residential &Stadium\\
+\hline
+Gombe &92 373 &3149 &Commercial&Political and economic centre of the city, ferry to Brazzaville, central hospital\\
+\hline
+\end{tabularx}
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm, height=8cm]{brt2}
+\caption{Path of BRT Line 2}
+\end{figure} 
+\newpage
+\noindent\textcolor{orange}{\textbf{Circular Line}}\\
+This line runs on the edges of the city centre, mainly in the Gombe municipality and will have a total length of 19.4km, with 37 stops, so one every 560m, and will run on the following roads:
+\begin{itemize}
+\item Buolevard Triomphal: 8 lanes, paved, in good condition;
+\item Avenue de la Liberation: 4 lanes, paved, in good condition;
+\item Avenue Sergent Moke: 2 lanes, paved, in fair condition;
+\item Avenue de Batetela: 2 lanes, paved, 
+\item Boulevard du Colonel Tshashi: 4 lanes, paved
+\item Avenue Kinsangani: 4 lanes, paved
+\item Avenue de Monts de Artes: 2 lanes, paved, poor condition;
+\item Avenue du Tomalbaye: 2 lanes, paved, fair condition;
+\item Avenue Kabasele Tshiamala joseph: 2 lanes, paved, fair condition;
+\item Avenue Kabinda: 2 lanes, paved, fair condition;
+\item Avenue des Huileries: 4 lanes, paved, good condition.
+\end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm, height=8cm]{circ}
+\caption{Path of the circular line}
+\end{figure} 
+\subsubsection{Infrastructure design}
+In this section a brief analysis of the infrastructure needed for the BRT is presented. Two main cases must be considered, depending on the dimension of the road.\\
+On streets with a width of at least 30 meters, like Boulevard 30 june, is possible to have a completely separated lane for the BRT, leaving enough space for 2 or more lanes for normal road traffic in both directions. The BRT lanes can be placed in the middle of the road or at the curbside. The first one is the worldwide preferred solution for BRT system because central lanes have fewer conflicts with turning vehicles, parkings and other possible obstacles, the latter solution offers the advantage that passengers enter and exit the bus directly on the sidewalks, so they don not necessary need to cross the street every time.\\
+The following images show the two possibile cross sections of the roads.
+\begin{figure}[H]
+\includegraphics[width=1\textwidth, height=4cm]{brtsection}
+\caption{Cross section with BRT lanes in the centre of the road}
+\end{figure} 
+\begin{figure}[H]
+\includegraphics[width=1\textwidth, height=5cm]{brtwide}
+\caption{Cross section with BRT lanes at the curbside}
+\end{figure} 
+On narrower streets, in which width is 18m or less, the road configuration varies slightly, with two possible options:
+\begin{itemize}
+\item dedicate the lanes only to BRT, removing all private motorized traffic, this solution guarantees higher speeds and higher reliability to the service, but congestion can be increased on other roads.
+\item mixed traffic ,thus obtaining a reduction in the performance of the service.
+\end{itemize}
+\begin{figure}[H]
+\centering{
+\includegraphics[width=12cm, height=5cm]{brtnarrow}
+\caption{Cross section in case of narrow roads with BRT lanes}}
+\end{figure} 
+\newpage
+\subsection{Scenario 2: Train + Minibus}
+In this scenario to use existent infrastructure will be used: the railway line to Ndjili airport, the first part of Matadi-Kinshasa railway, up to Kimwenza station and to rebuild a one used in the past: the line to the west municipality of Kitambo.  
+The railway service is a kind of suburban rail service, with stops close to each other and high frequencies.\\
+As previously described in chapter 2, the existing rail lines are much underused, so we have plenty of margin before their saturation, but on the other hand we need to increase a lot the number of circulating trains to have high frequencies. Also, the number of stations in insufficient, because the existing ones are too far from each other (5km on average), to make a decent service that covers many neighbourhoods.  
+The service is divided in two lines, \textbf{\textcolor{blue}{Line 1}} and \textbf{\textcolor{violet}{Line 2}}, with a common part in the middle. \textit{(Passante dei poveri)}.\\
+The scenario is completed by the same circular line described for scenario 1.
+ \subsubsection{Reference path}
+ \textbf{Rail}\\
+ \textbf{\textcolor{blue}{Line 1: Ndjili airport-Kinshasa Ouest}}\\
+This line is the will be the most important of the network, and it is practically parallel to BRT line 1 of the first scenario, serving the same municipalities and facilities. It will be 27.5 km long and with 21 stations, so one every 1.3 km on average (5 of them in common with line 2).\\
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm, height=8cm]{ferro1}
+\caption{Path of railway line 1}
+\end{figure} 
+
+\textbf{\textcolor{violet}{Line 2: Kimwenza-Gare Centrale}}\\
+This line will be on the currently used Kinshasa-Kansagulu railway, connecting the southern suburbs to the city centre. Despite being nearly parallel to BRT line 2 this service will serve different areas because it is about 8-9 km east to it.
+This line will be 25.7 km long with 15 stations in total (including the 5 in common with line 1), so one every 1.7 km on average.\\
+The following municipalities are served by this line:\\
+\\
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X |}
+ \hline
+\textbf{ Municipality} & \textbf{Population} & \textbf{Pop. density} \newline $(ab/km^{2})$ & \textbf{Main areas} & \textbf{Main facilities}\\
+\noalign{\hrule height 1.2pt}
+Mont Ngafula &261 004 &730 & Residential/ Rural &-\\
+ \hline 
+Lemba & 349 838 & 14 761& Residential& Universitè de Kinshasa\\  
+ \hline
+ Kisenso & 386 151 &23 262 &Residential&-\\
+ \hline
+Matete&268 781&55 078 &Residential & Several schools\\
+ \hline
+Limete &375 726 &5558 &Mainly industrial &Several industries and port facilities\\
+\hline
+Barumbu &116 573 &24 698&Commercial/ Industrial &Port facilities\\
+\hline
+Gombe &92 373 &3149 &Commercial&Political and economic centre of the city, ferry to Brazzaville, central hospital\\
+\hline
+\end{tabularx}
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm, height=9cm]{ferro2}
+\caption{Path of railway line 2}
+\end{figure} 
+The path of the \textcolor{orange}{circular line} is the same as the one described for scenario 1.
+
+\subsubsection{Infrastructure design}
+The existing railways are in really poor conditions nowadays, and huge improvements need to be made to guarantee a decent service, the main interventions are:
+\begin{itemize}
+\item track improvement: replacement of ballast, sleepers, rails and rail fastening system;
+\item introduction of a signalling system, the one in use is very basic.
+\end{itemize}
+Also, the line must be doubled, because a single track line cannot sustain the amount of traffic of the new service, as will be described in the service planning section.
+
+
+\section{Vehicle model and simulation results} %%% section 5
+\subsection{Longitudinal dynamics model} 
+To simulate the performance of the vehicle running on the route, a model was developed which simulates the longitudinal dynamical behaviour of the vehicle. The overall structure of the model is the same for diesel buses, electric buses and trains, however with slight differences, to take account e.g. of gear shifting in ICE buses. The model takes the vehicle parameters and the path (made of stretches with their length and maximum speed) as input and returns the acceleration-position, speed-position, motor power-position, acceleration-time, speed-time, motor power-time diagrams, average speed and energy (fuel) consumption.\\
+The model workflow is the following:
+\begin{enumerate}
+\item Initiate the model parameters: at the beginning the vehicle is not moving.
+\item At each step the model computes the maximum possible acceleration, then updates the speed and vehicle position, using the integration time step. The model chooses to accelerate, keep a constant speed or brake depending on the stretch characteristics.  
+\item At the end of the stretch, the model updates its parameters knowing the vehicle position along the path. The model stops when the position of the vehicle is the same as the length of the path. 
+\end{enumerate}
+\subsubsection{Model input}
+The model takes three main groups of inputs: 
+\begin{enumerate}
+\item The route specification (path stretches).
+\item The route information and constraints.
+\item Vehicle parameters. 
+\end{enumerate}
+The route has to be specified though a .csv file, here is an example of the structure of the file:
+\begin{center}
+\begin{tabularx}{.3\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X |}
+ \hline
+ \textbf{Length (m)} & \textbf{Vmax (km/h)}\\
+ \noalign{\hrule height 1.2pt}
+ 257 & 30\\
+ \hline
+ 273 & 5\\ 
+\hline
+2449 &70\\ 
+\hline
+2469 &3.6 \\
+\hline
+3348 &70\\ 
+\hline
+3368 &3.6\\ 
+\hline
+4064 &70\\ 
+\hline
+4084 &3.6\\ 
+\hline
+4775 &70\\ 
+\hline
+4795 &3.6\\ 
+\hline
+5560 &70\\ 
+\hline
+5580 &3.6\\ 
+\hline
+6433 &70\\ 
+\hline 
+\end{tabularx}
+\end{center}
+The list of route information and constraints is the following:
+\begin{center}
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X |}
+ \hline
+ \textbf{Parameter} & \textbf{Description} & \textbf{Unit of measure}\\
+\noalign{\hrule height 1.2pt}
+\vskip 2.3mm Vmax &Starting speed of the vehicle. The value is automatically updated after the first model iteration &\vskip 2.3mm $km/h$\\
+ \hline
+ \vskip 1.5mm amax & Maximum allowed longitudinal acceleration for comfort purposes & \vskip 1.5mm $m/s^{2}$\\ 
+\hline
+alpha&Road gradient & $Rad$\\ 
+\hline
+\end{tabularx}
+\end{center}
+\newpage
+
+\noindent The list of vehicle parameters is the following:\\
+
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X |}
+ \hline
+ \textbf{Parameter} & \textbf{Description} & \textbf{Unit of measure}\\
+\noalign{\hrule height 1.2pt}
+ Rated torque &Maximum engine torque & $Nm$\\
+\hline
+Rated power  & Maximum engine power & $kW$\\ 
+\hline
+fr&Rolling resistance coefficient & $-$\\ 
+\hline
+A & Front area & $m^{2}$\\
+\hline
+rho & Air density & $kg/m^3$\\
+\hline
+Cx &Drag coefficient &$-$\\
+\hline
+ m& Vehicle curb mass & $kg$\\
+ \hline
+mp &Passenger mass &$kg$\\
+\hline 
+npax &Number of passengers for the simulation&$ -$\\
+\hline 
+tau &Portal axle transmission ratio&$ -$\\
+\hline 
+eta d &Transmission efficiency with direct power flow&$-$\\
+\hline 
+eta r &Transmission efficiency with reverse power flow &$-$\\
+\hline 
+R& Wheel radius &$m$\\
+\hline 
+mu &Adhesion coefficient&$ -$\\
+\hline 
+madhesion &Fraction of mass bore by traction wheels &$-$\\
+\hline 
+Transmission ratios & List of the transmission ratios of the gearbox (only ICE bus) &$-$\\
+\hline
+max rpm &Engine speed to upshift (only ICE bus) &$rpm$\\
+\hline
+ min rpm &Engine speed to downshift (only ICE bus) &$rpm$ \\
+\hline
+max braking torque &Maximum torque produced by the retarder (only ICE bus) &$Nm$ \\
+\hline
+min braking torque &Minimum torque produced by the retarder (only ICE bus)&$ Nm$\\
+\hline
+beta &Fraction of equivalent rotatory mass over the vehicle curb mass & $-$\\
+\hline 
+Engine efficiency &Engine efficiency while powering (only electric vehicles) &$-$\\
+\hline 
+Regeneration factor &Regenerative braking efficiency (only electric vehicles) &$-$\\
+\hline
+Specific consumption & Specific fuel consumption (only ICE vehicles)& $g/kWh$\\
+\hline 
+Tractive effort &Starting tractive force at wheels (only train) & $kN$\\ 
+\hline
+\end{tabularx}
+\newpage
+\subsubsection{Model structure}
+%\begin{verbatim} %%% da eliminare
+The following diagrams explain the functioning of these three models (ICE bus, electric bus, rail vehicle): 
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm, height=7cm]{diesel}
+\caption{ICE bus model flow diagram}
+\end{figure} 
+
+The flow diagram for electric buses is similar to that of ICE buses, apart from the absence of the retarder and the fact that the gear is fixed: 
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm, height=7cm]{electric}
+\caption{Electric bus model flow diagram}
+\end{figure} 
+\newpage
+\noindent The train model is further simplified, as no gearbox is considered, thus the “Engine” returns a traction force which is considered to be applied directly at the wheels: 
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm, height=7cm]{treno}
+\caption{Train model flow diagram}
+\end{figure} 
+%\end{verbatim} %%% da eliminare
+The previous diagrams give an overview on the functioning of the simulation model, linked to the “physical” vehicle. The following sections, however, focus on the content of the logical modules of the simulation code; the ICE bus model is presented, being it the most complex, then the differences with the modelling of the other vehicles are highlighted. The modules are: 
+\begin{itemize}
+\item Control system.
+\item Acceleration. 
+\item Braking.
+\item Coasting.
+\item Compute max deceleration and braking distance. 
+\item Motor.
+\item Energy/fuel consumption.
+\item Downshift (only ICE bus).
+\item Upshift (only ICE bus).
+\item Gearbox (only ICE bus).
+\item Retarder (only ICE bus).
+\end{itemize}
+\newpage
+\subsubsubsection{Control logic}
+
+\begin{lstlisting} [language=Python]
+For each stretch in path_stretches: 
+      While x(t)<length(stretch): 
+          If speed(t)<max_speed(stretch): 
+             Speed(t+ dt)=Speed(t)+acceleration(t)*dt
+             Motor_power(t)=Motor_power(speed(t),acceleration(t)) 
+          If speed(t) ~ max_speed(stretch): 
+             If x(t)- length(stretch)>brake_distance(t): 
+                Speed(t+dt)=Speed(t) 
+                Motor_power(t)=Motor_power(speed(t)) 
+              If x(t)- length(stretch)<brake_distance(t): 
+                Speed(t+dt)=Speed(t)-deceleration(t)* t 
+                Motor_power(t)=Motor_power(speed(t),deceleration(t)) 
+If stretch=last_stretch: 
+    Compute_average_speed(speeds) 
+    Energy_consumption=(For t in (0, T): sum(Motor_power(t)) 
+\end{lstlisting}
+\subsubsubsection{Acceleration}
+This module computes the vehicle maximum acceleration as the minimum among the comfort constrain, the maximum acceleration achievable by the motor and the adhesion limit. The maximum acceleration achievable by the motor is computed as:\\
+\begin{equation}
+a=\frac{\frac{\eta_{d}(T_{m}(\frac{\nu\tau(gear)}{r}))*\tau(gear)}{r} -(Mg\sin(\alpha)+f_{r}Mg\cos(\alpha)+\frac{1}{2}C_{x}\rho Av^2)}{M_{e}}
+\end{equation}
+Where:
+\begin{itemize}
+\item $\eta d$= direct power flow transmission efficiency 
+\item Tm=motor torque as a function of engine speed 
+\item V=vehicle forward speed 
+\item T=transmission ratio 
+\item r=wheel radius 
+\item M=vehicle gross mass 
+\item g=gravity 
+\item fr=rolling friction coefficient 
+\item Cx=drag coefficient 
+\item $\rho$=air density 
+\item A=front area 
+\item Me=equivalent mass, computed as: 
+\begin{equation}
+M_{e}=m(1+\beta)+m_{p}
+\end{equation}
+\end{itemize}
+Where:
+\begin{itemize}
+\item m=vehicle curb mass 
+\item $\beta$=rolling mass fraction over curb mass 
+\item mp=passengers’ mass 
+\end{itemize}
+The adhesion limit is computed as:
+\begin{equation}
+a=g\mu \cos(\alpha)\%M_{adhesion}
+\end{equation}
+Where:
+\begin{itemize}
+\item $\mu$=adhesion coefficient 
+\item $\alpha$=road grade 
+\item $\%M_{adhesion}$=percentage of weight bore by the motorised axle
+\end{itemize}
+Eventually, the module computes the motor power using the formula: 
+\begin{equation}
+Power=\frac{(Mg\sin(\alpha)+f_{r}Mg\cos(\alpha)+\frac{1}{2}C_{x}\rho Av^2+aM_{e})v}{1000\eta_{d}}
+\end{equation}
+The expression must be divided by 1000 to get the results in kW. The expression for acceleration is slightly edited for the case of the train: 
+\begin{equation}
+a=\frac{F(v)-(Mg\sin(\alpha)+f_{r}Mg\cos(\alpha)+\frac{1}{2}C_{x}\rho Av^2)}{M_{e}}
+\end{equation}
+Where F is the traction force as a function of longitudinal speed.\\
+
+\subsubsubsection{Motor}
+The motor module takes the engine speed as an input and returns the motor torque. The first action performed by the model is the computation of the motor base speed as: 
+\begin{equation}
+\omega_{base}=\frac{P_{max}}{T_{max}}
+\end{equation}
+Where:
+\begin{itemize}
+\item Pmax=rated motor power 
+\item Tmax=rated motor torque 
+\end{itemize}
+Then, the output torque is selected depending on the current motor speed:
+\begin{itemize}
+\item if $\omega_m< \omega_{base}$ the output torque is $T_{max}$
+\item if  $\omega_m> \omega_{base} $ the output torque is $\frac{P_max}{\omega_m}$
+\end{itemize}
+The motor module is the same for the ICE and for the electric bus, while there are same changes in the train one: torque has been replaced by tractive effort and engine speed by the vehicle forward speed.\\
+
+\subsubsubsection{Braking}
+This module computes the vehicle maximum deceleration as the minimum among the comfort constrain, the maximum decelerations achievable by the motor and brakes and the adhesion limit. The maximum deceleration achievable by the motor and brakes is computed as: 
+\begin{equation}
+a=-\frac{\frac{T_b(gear)\tau(gear)}{r}+\eta_r(Mg\sin(\alpha)+f_{r}Mg\cos(\alpha)+\frac{1}{2}C_{x}\rho Av^2)}{\eta_{r}M_{e}}
+\end{equation}
+Where:
+\begin{itemize}
+\item $Tb$=is the braking torque as a function of the gear (computed in the retarder module) 
+\item $\eta_r$=reverse power flow transmission efficiency
+\end{itemize}
+The expression varies slightly for electric buses, as the braking torque is provided directly by the engine, not by the hydraulic retarder: 
+\begin{equation}
+a=-\frac{\frac{T_m(\frac{\nu \tau (gear}{r}\tau(gear))}{r}+\eta_r(Mg\sin(\alpha)+f_{r}Mg\cos(\alpha)+\frac{1}{2}C_{x}\rho Av^2)}{\eta_{r}M_{e}}
+\end{equation}
+The expression for acceleration is slightly edited also for the case of the train: 
+\begin{equation}
+a=-\frac{F(v)-(Mg\sin(\alpha)+f_{r}Mg\cos(\alpha)+\frac{1}{2}C_{x}\rho Av^2)}{M_{e}}
+\end{equation}
+The model eventually computes the motor power: 
+\begin{equation}
+Power=\frac{(Mg\sin(\alpha)+f_{r}Mg\cos(\alpha)+\frac{1}{2}C_{x}\rho Av^2+aM_{e})v}{1000}
+\end{equation}
+
+\subsubsubsection{Retarder}
+Although an ICE engine produces a braking torque in reverse power flow, this is limited compared to that generated by an electric engine, consequently a hydraulic retarder is necessary to assist braking. The hydraulic retarder, which more specifically in our case is an “intarder”, since it is integrated into the gearbox, produces a braking torque using the friction produces by a viscous oil. The torque output depends on the running gear and also on engine speed: this second factor has, however, a limited effect, thus it has been neglected. The following picture shows the characteristic braking curve if the retarder of a ZF Ecolife gearbox with the corresponding output torque values: \\
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm, height=10cm]{cambio}
+\caption{Retarder characteristic curve}
+\end{figure} 
+\subsubsubsection{Compute max deceleration and braking distance}
+The maximum deceleration is computed as described in the “Braking” section, then the braking distance is computed as: 
+\begin{equation}
+d=\frac{v^2-v^{2}_{following}}{a_b}
+\end{equation}
+Where
+\begin{itemize}
+\item $v$=current vehicle speed 
+\item $v_{following}$=target speed in the following path stretch 
+\item $a_b$= maximum braking acceleration 
+\end{itemize}
+\subsubsubsection{Gearbox}
+The gearbox module returns the transmission ratio from the engine to the final drive. In the case of the electric bus, it simply returns the portal transmission ratio, while for the ICE bus the transmission ratio is the product of the gearbox transmission ratio and that of the portal axle. The gear is selected into a separate module. In addition, the effect of the torque converter has been ignored: in reality, the vehicle starts in “0 gear”, meaning that torque is initially transmitted through a hydraulic converter, whose transmission ratio varies continuously with the speed. This fact was not considered for simplicity, so that in our model the bus leaves in first gear.\\
+
+\subsubsubsection{Upshift and downshift}
+This module is only available for the ICE engine, and accounts for the need of changing gears depending on running speed. Trivially, at every step of the iteration, the engine speed is checked: if the speed is above the maximum speed, the gearbox upshifts, while if it is below the minimum speed, then the gearbox down.\\
+
+\subsubsubsection{Coasting}
+The module simply considers a null acceleration and computes the motor power, necessary to keep a constant speed: 
+\begin{equation}
+Power=\frac{(Mg\sin(\alpha)+f_{r}Mg\cos(\alpha)+\frac{1}{2}C_{x}\rho Av^2)v}{1000\eta_{d}}
+\end{equation}
+\subsubsubsection{Energy/fuel consumption}
+To compute the total energy consumption, the motor power is summed all over the path. The computation is significantly different between the electric and the ICE bus, mainly to take into consideration the fact that an electric bus can benefit from regenerative braking.\\
+In general:
+\begin{equation}
+Energy\:consumption=\sum_{t=0}^{Tf}P(t)
+\end{equation}
+For an electric bus the instantaneous power consumption at the battery is defined as:
+\begin{equation}
+P(t)=
+\begin{cases}
+P(t)\eta_{rigen} & P(t)<0 \\
+P(t)\eta_{powering} &  P(t)\geq0\\
+\end{cases}
+\end{equation}
+Where:
+\begin{itemize}
+\item $\eta_{powering}$=is the overall efficiency of the electric system (battery, VfD and engine) while powering 
+\item $\eta_{rigen}$=regeneration coefficient
+\end{itemize}
+Conversely, for an ICE bus and a train: 
+\begin{equation}
+P(t)=
+\begin{cases}
+0 & P(t)<0 \\
+P(t) &  P(t)\geq0\\
+\end{cases}
+\end{equation}
+Followingly, the energy consumption must be converted into fuel consumption: 
+\begin{equation}
+Fuel\:consumption=\frac{(Energy\:consumption)*c}{\rho_f}
+\end{equation}
+Where:
+\begin{itemize}
+\item $c$=specific fuel consumption 
+\item $\rho_f$=fuel density (0,832 kg/L for gas oil) 
+\end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[width=11cm, height=4cm]{om470}
+\caption{Example of a speed-consumption diagram of the OM470 engine}
+\end{figure} 
+\newpage
+\subsubsection{Model output}
+The model produces as an output the plots of speed, motor power and acceleration over elapsed distance or time. The following picture shows an example of the output for an ICE bus: 
+\begin{figure}[H]
+\centering
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=20cm]{outputice}}
+\caption{Example of the model output for an ICE bus: motor power, speed and acceleration over elapsed distance}
+\end{figure} 
+From here one can clearly see the impact of the gearbox and of the retarder on the acceleration and braking processes. This will be even clearer when comparing the output for ICE and electric buses.\\
+
+\textbf{ICE bus output}\\
+These plots allow to spot the correlation between acceleration, motor power and speed: 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=6cm]{ice1}
+\caption{Comparison of motor power and acceleration for an ICE bus}
+\end{figure} 
+Since the vehicle has to change gear, power when accelerating does not remain constant, because the engine works in the “constant torque” range multiple times. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=6cm]{ice2}
+\caption{Comparison of speed and acceleration for an ICE bus}
+\end{figure} 
+As expected, acceleration is null while the vehicle keeps a constant speed. The speed curve both for accelerations and braking show an angular point: this is due to the gears moving from overdrive to direct drive. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=6cm]{ice3}
+\caption{Comparison of motor power and speed for an ICE bus}
+\end{figure} 
+\textbf{Electric bus output}\\
+These plots allow to spot the correlation between acceleration, motor power and speed: 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=6cm]{electric1}
+\caption{Comparison of motor power and acceleration for an electric bus}
+\end{figure} 
+These plots are a lot cleaner that the ICE bus ones, since the electric engine can operate at a constant torque or power regime with no need for changing gears. The spikes in the acceleration and power diagram are due to the extremely aggressive control logic, which first brakes hard, then quickly accelerates again to the target speed. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=6cm]{electric2}
+\caption{Comparison of speed and acceleration for an electric bus}
+\end{figure} 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=6cm]{electric3}
+\caption{Comparison of motor power and speed for an electric bus}
+\end{figure}
+\textbf{ICE – electric bus comparison}\\
+This diagram allows to spot differences between the behaviour of an electric bus and that of an ICE bus. The first thing one can notice is the smoothness of the acceleration and braking of electric buses: this is not only beneficial to the vehicle performance, but also to passengers, who do not experience abrupt changes in acceleration. The acceleration phase for the ICE bus is longer and braking begins earlier compared to the electric bus. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=18cm]{comparison}
+\caption{ICE bus (blue) vs electric bus (red)}
+\end{figure}
+\newpage
+\subsection{Vertical dynamics model}
+To assess the vibrating comfort of our bus line, a quarter-car vertical dynamics model was developed, to simulate the response of our vehicle to road irregularity. Road irregularity is defined according to the ISO 8608 norm: the Power Spectral Density (PSD) of the road is given, and from that we obtain a road profile. Given the vehicle parameters (masses, suspension stiffness and damping, …) a transfer function is obtained, which returns the vertical acceleration to which the vehicle body is subject. Finally, a filter is applied to the car-body acceleration to obtain the vibration perceived by the human body and we compute the Root Mean Square (RMS) value of the acceleration, which is a proxy of passenger riding comfort according to ISO 2631.\\
+The objective of this analysis is to evaluate the effect of the variation of vehicle parameters on the response function and, thus, on riding comfort.\\
+
+\textbf{Vehicle}\\
+The vehicle is modelled through a 2-DOF system: 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=6cm]{quartercar}
+\caption{Quarter car model}
+\end{figure}
+Different parameters for sprung and unsprung mass, suspension and tyre stiffness and weight are set for each axle of the bus. The unsprung mass is computed as the half of the axle mass, while the sprung mass the process is less straightforward. First the gross mass of the vehicle, dependent on the passenger load, is computed, then it is multiplied by the percentage of weight bore by a specific axle, as shown in the longitudinal dynamics section regarding the adhesion conditions; finally, the value is divided by two. This model returns the response function of the two masses, regarding their position, speed and acceleration.\\
+The following picture shows the frequency response functions (FRF) of the sprung and unsprung masses of the front axle suspension of a Capacity L. This FRF represents the displacement of the mass as a function of excitation frequency with respect to the road displacement. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=6cm]{rensponse}
+\caption{Example of a Frequency Response Function of sprung and unsprung mass for a quarter car model}
+\end{figure} 
+\textbf{Road profile}\\
+The road profile has been reconstructed according to the ISO 8608 norm, starting from the road class PSD and an array of spacial frequencies.\\
+\begin{align*}
+G_d(n)=G_d(n)(\frac{n}{n_0})^{-2}\:&\Longrightarrow  Z_{r}(n)=\sqrt{2G_{d}(n)\Delta n}\:&\Longrightarrow 
+z_{r}(x)=\sum_{n=n_{min}}^{n=n_{max}}Z_{r}(n)\cos(2\pi nx+\phi_{n})
+\end{align*}
+Here is an example of the displacement PSD of the road as a function of the spacial frequency (cycles/m) and the resulting road profile over position in space. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=6cm]{roadprofile}
+\caption{Example of road displacement PSD and of the actual road profile }
+\end{figure} 
+The road classes to test the vehicle have been deduced from experimental measurements of road irregularity found in the literature \cite{irregularity1}. Here are two examples of a class B road and of a class C road, taken from the literature \cite{irregularity2}: 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=5cm]{roadtypes}
+\caption{B class road on the left, C class road on the right}
+\end{figure} 
+\textbf{Passenger confort}\\
+Passenger comfort is evaluated though the following procedure: 
+\begin{enumerate}
+\item The spectrum of the car-body displacement $Z_{s}$ is computed as a function of frequency. Basically, it is the sprung mass FRF multiplied by the road PS
+\begin{figure}[H]
+\centering
+\includegraphics[width=5cm, height=6cm]{sprungmasses}
+\caption{Example of the spectrum of the sprung and unsprung mass displacement}
+\end{figure} 
+\begin{equation}
+Z_{s}(f)=H_{sr}(f)Z_{r}(f)
+\end{equation}
+\item The car-body acceleration spectrum is computed: 
+\begin{equation}
+\ddot{Z}_{s,weighted}(f)=j(2\pi f)\dot{Z}_s(f)=-(2\pi f)^{2}Z_s(f)
+\end{equation}
+\item The ponderation filter Wz is applied, which is necessary to account for the fact that the human body is a vibrating system itself, consequently being more or less sensitive to excitation depending on its frequency.
+\begin{equation}
+\ddot{Z}_{s,weighted}(f)=W_{z}(f)\ddot{Z}_{s}(f)
+\end{equation}
+Here is an example of the ponderation filters defined by the ISO 2631 norm: 
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm, height=6cm]{iso}
+\caption{Frequency weightening filters according to ISO 2631 }
+\end{figure}
+\item The RMS of the weighted vertical acceleration is computed: 
+\begin{equation}
+a_{w,RMS}=\left[\sum_{i}(W_{i}a_{i})\right]^{\frac{1}{2}}
+\end{equation}
+\end{enumerate}
+\newpage
+\subsection{Trip simulation of the BRT line}
+To simulate the longitudinal dynamics of buses on the BRT line, a number of articulated and bi-articulated buses was selected: some are manufactured in Europe, others use a European or Chinese frame, while the car-body is manufactured locally. The manufacturer of the buses currently used by the local bus company, Transco, is the Brazilian firm Marcopolo\cite{marcopolo}, thus we have chosen the non-European buses from its catalogue. Both ICE buses and electric ones were evaluated, to assess their performance: a further analysis of their cost and about the electric system in Kinshasa in necessary to choose the best alternative.\\
+The following table reports the input data used for each vehicle.\\
+\\
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X |}
+\hline
+\textbf{Name} & \textbf{Capacity (L)} & \textbf{Citaro Electric} & \textbf{Marcopolo Volvo B340M} & \textbf{Marcopolo Volvo B340M} & \textbf{Marcopolo BYD D11B}\\
+\noalign{\hrule height 1.2pt}
+Lenght $[m]$ &21& 18& 18& 25& 22\\
+\hline
+ Maximum capacity &191& 147& 150& 250& 200 \\
+\hline
+Fuel& Diesel &Electricity& Diesel& Diesel& Electricity \\
+\hline
+Battery capacity $[kWh]$ &-& 264& -& -& 550\\
+\hline 
+Engine name& OM470 &ZF AVE 130 &DH12E340& DH12E340& BYD-2912TZ-XY-A\\
+\hline
+Rated torque $[Nm]$ &1900& 1940 &1700 &1700 &2200\\
+\hline
+Rated power $[kW]$ &290& 500& 250& 250 &600\\
+\hline 
+Retarder max torque $[Nm]$& 2650 &-& 2250 &2250& -\\ 
+\hline
+Retarder min torque $[Nm]$& 2100& -& 2100& 2100 &-\\
+\hline
+$f_r$& 0,007 &0,007& 0,007& 0,007& 0,007\\
+\hline
+A $[m^2]$& 6,3& 7,9 &6,3 &6,3& 7,9\\
+\hline
+$C_x $&0,6& 0,6 &0,6& 0,6 &0,6\\
+\hline
+Curb mass $[kg]$& 20240 &20650 &18100 &22750 &25000\\
+\hline
+Portal ratio& 5,82 &22,66 &7,21& 7,21& 22\\
+\hline
+$\eta_d$& 0,97 &0,97& 0,97& 0,97 &0,97\\
+\hline
+$\eta_r$& 0,95 &0,95& 0,95& 0,95& 0,95\\
+\hline
+r $[m] $&0,47& 0,47 &0,47& 0,47 &0,47\\
+\hline
+$\mu$ & 0,8 &0,8 &0,8 &0,8& 0,8\\
+\hline
+$m_{adhesion}$& 0,35& 0,75 &0,39 &0,29 &0,63\\ 
+\hline
+Transmission ratios &1:3.36,2:1.91,\newline 3:1.42,4:1,\newline 5:0.71,6:0.59& -&1:3.36,2:1.91,\newline 3:1.42,4:1,\newline 5:0.71,6:0.59&1:3.36,2:1.91\newline,3:1.42,4:1,\newline5:0.71,6:0.59&-\\
+\hline
+$max_{rpm}[rpm]$& 1700& - &1600 &1600 &-\\
+\hline
+$min_{rpm}$[rpm]& 1000& -& 1000 &1000 &-\\
+\hline
+Auxiliaries power $[kW]$ &30& 30& 30& 30& 30\\
+\hline
+$\beta $&0,08& 0,05& 0,08 &0,08& 0,05\\ 
+\hline
+Specific fuel consumption $[g/kWh]$& 190 &- &190 &190 &-\\
+\hline
+\end{tabularx}
+The data was collected from various sources:
+\begin{itemize}
+\item From bus manufactures brochures: model name, passenger capacity, fuel type, engine characteristic curve, curb mass, portal transmission ratio, wheel radius and the specific fuel consumption. 
+\item From Zf product brochures: retarder torque and the gear transmission ratios. 
+\item Some parameters were computed from the available data: the front area was computed from the vehicle dimensions and the rolling mass was computed from the maximum allowed weight on the axels. The beta factor was hypothesised knowing the number of wheels per vehicle and that the moment of inertia of a wheel is about $20,5 kg*m^{2}$: knowing this, we computed the equivalent mass and divided by the curb mass. The value was increased slightly for ICE buses, to account for the presence of a more massive engine, whose contribution to the equivalent mass varies while driving according to the gear transmission ratio. The maximum and the minimum speed of the engine to change gear was deduced from the engine characteristic curve. 
+\item The power of the auxiliaries was hypothesised basing on product brochures by the bus-heat pump manufacturer Konvekta. The values were rounded up to account for the fact that there are auxiliaries other than air conditioning or heating, such as lighting and compressors. 
+\item The remaining parameters were deduced from the literature\cite{4}\cite{5} which has also been used to check if the other values were plausible. 
+\end{itemize}
+Some values, especially regarding the vehicles by Marcopolo had to be hypothesised, as data only about the frame were available: not much information about the final product was found. Unless differently stated, the sources can be found as attachments. 
+\subsubsection{Results}
+The following table reports the results of the simulation. Be aware that in the case of the 25-metre Marcopolo Volvo B340M the route was altered by reducing the target speed to 60 km/h along the Avenue du 30 Juin and mechanical brakes were used in addition to the hydraulic retarder, otherwise the vehicle would not have been able to successfully complete an accelerate-brake cycle. In all simulations the passenger load was assumed to be half of the maximum capacity. The bus was assumed to stop for 20 seconds at each stop.\\
+\\
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X |}
+\hline
+\textbf{Name} & \textbf{Capacity (L)} & \textbf{Citaro Electric} & \textbf{Marcopolo Volvo B340M} & \textbf{Marcopolo Volvo B340M} & \textbf{Marcopolo BYD D11B}\\
+\noalign{\hrule height 1.2pt}
+Travel Time $[min]$&39,5& 40,8& 39,3& 48,6& 40,3\\ 
+\hline
+Average speed $[km/h]$ &46,5& 45& 46,7& 37,7& 45,6\\
+\hline 
+Electricity consumption $[kWh]$& -& 76,1& -& -& 87\\ 
+\hline
+Fuel consumption $[L]$ &25,3& -& 22,8& 26,4& - \\
+\hline
+\end{tabularx}
+The following pictures show the speed of the vehicle, its acceleration and the motor power over the position along the route and time for the Capacity L and the Citaro Electric 18m:
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=23cm]{trip1}}
+\caption{BRT line – Motor power, speed and acceleration over space and time:  Capacity L}
+\end{figure}
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=23cm]{trip2}}
+\caption{BRT line – Motor power, speed and acceleration over space and time: Citaro Electric 18m}
+\end{figure}
+\subsection{Trip simulation on the Circular Line}
+To simulate the longitudinal dynamics of buses on the circular line, it was chosen a number of standard length (12 m) buses: some are manufactured in Europe, others use a European or Chinese frame, while the car-body is manufactured locally. The manufacturer of the buses currently used by the local bus company, Transco, is the Brazilian firm Marcopolo\cite{6}, thus we have chosen the non-European buses from its catalogue. Particularly, in this case the simulated vehicle, the Marcopolo Torino based on a Mercedes-Benz chassis, is the one currently used for urban service in Kinshasa. Both ICE buses and electric ones were evaluated, to assess their performance: a further analysis of their cost and about the electric system in Kinshasa in necessary to choose the best alternative. The following table reports the input data used for each vehicle.\\
+
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X|}
+\hline
+\textbf{Name} & \textbf{Citaro} & \textbf{Citaro Electric} & \textbf{Marcopolo Torino OF 1721L} & \textbf{Marcopolo BYD D9W}\\
+\noalign{\hrule height 1.2pt}
+Lenght $[m]$& 12& 12 &12 &12\\
+\hline
+Maximum capacity &106& 77& 85& 90 \\
+\hline
+Fuel &Diesel& Electricity& Diesel& Electricity\\
+\hline
+Battery capacity $[kWh]$ &-& 198& -& 324\\ 
+\hline
+Engine name &OM936 &ZF AVE 130 &OM924 &BYD-2912TZ-XY-A\\
+\hline
+Rated torque $[Nm]$ &1200& 970& 780& 1100\\
+\hline 
+Rated power $[kW]$ & 220& 250& 153& 300\\
+\hline 
+Retarder max torque $[Nm]$& 1600& -& -& -\\ 
+\hline
+Retarder min torque $[Nm]$&1600& -& -& -\\ 
+\hline
+$f_r$& 0,007& 0,007& 0,007& 0,007\\ 
+\hline
+A $[m^2]$& 6,3& 7,9& 6,3& 7,9\\
+\hline 
+$C_x$& 0,55 &0,55& 0,55 &0,55 \\
+\hline
+Net mass $[kg]$ &10775 &12500 &10000& 12500\\
+\hline
+Portal ratio& 5,82& 22,66& 5,875& 22\\
+\hline
+$\eta_d$& 0,97 &0,97 &0,97& 0,97\\
+\hline
+$\eta_r$ &0,95 &0,95 &0,95& 0,95\\
+\hline
+$r [m]$&0,47& 0,47& 0,47& 0,47\\
+\hline 
+$\mu$&0,8 &0,8 &0,8& 0,8\\ 
+\hline
+$m_adhesion$&0,63 &0,63 &0,62& 0,64\\
+\hline
+Transmission ratios &1:3.36,2:1.91,\newline 3:1.42,4:1,\newline 5:0.71,6:0.59& -&1:6.70,2:3.81,\newline 3:2.89,4:1.48,\newline 5:1,6:0.73&-\\
+\hline
+$max_rpm [rpm]$& 2000& - &1800 &- \\
+\hline
+$min_rpm [rpm]$& 1200& - &1200 &-\\
+\hline
+Auxiliaries power $[kW] $&10& 10& 2 &10\\ 
+\hline
+$\beta$& 0,08& 0,05&0,08& 0,05\\
+\hline
+Specific fuel consumption $[g/kWh]$& 190 &- &200 &-\\
+\hline
+\end{tabularx}
+\
+
+The data was estimated in the same way described in the previous paragraph. 
+\subsubsection{Results}
+The following table reports the results of the simulation. Be aware that in the case of the Marcopolo Torino mechanical brakes were used, as it has been supposed that no hydraulic retarder is available. In all simulations the passenger load was assumed to be half of the maximum capacity. The bus waiting time at stops is randomly distributed between 20 and 80 seconds to account for the greater stochasticity of mixed traffic operations as well as junctions.\\
+\
+
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X|}
+\hline
+\textbf{Name} & \textbf{Citaro 12m} & \textbf{Citaro Electric 12m} & \textbf{Marcopolo Torino} & \textbf{Marcopolo BYD D9W}
+\\
+\noalign{\hrule height 1.2pt}
+Travel Time $[min]$&54& 53.7& 56& 54.8\\ 
+\hline
+Average speed $[km/h]$ &21.8& 21.9& 21& 21.5\\
+\hline 
+Electricity consumption $[kWh]$& -& 25.8& -& 26.4\\ 
+\hline
+Fuel consumption $[L]$ &8& -& 6& - \\
+\hline
+\end{tabularx}
+\
+
+The following pictures show the speed of the vehicle, its acceleration and the motor power over the position along the route and time for the Citaro 12m and for the Citaro electric 12m:
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=23cm]{circ1}}
+\caption{Circular line – Motor power, speed and acceleration over space and time: Citaro 12m}
+\end{figure}
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=23cm]{circ2}}
+\caption{Circular line – Motor power, speed and acceleration over space and time: Citaro Electric 12m}
+\end{figure}
+\subsection{Trip simulation on the railway}
+To simulate the longitudinal dynamics of trains on the railway line, it was selected a bi-modal European train: the Stadler Wink. The choice of this model is due to the fact that, being equipped with diesel engines, it can run with no need for aerial electricity supply. Despite this, the vehicle is equipped with a pantograph, so that in the future, considering that the useful life of a train can be as high as 30 years, the vehicle is going to be able to run fully electric. The possibility of replacing the engine with batteries is also envisaged\cite{7}.\\
+The following table reports the input data used for each vehicle.\\
+ 
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X|}
+\hline
+\textbf{Name} & \textbf{Wink} & \textbf{Wink}\\
+\noalign{\hrule height 1.2pt}
+Lenght $[m]$ &55,5 &55,5\\
+\hline
+Maximum capacity& 274& 274\\
+\hline
+Fuel &Diesel &Electric\\
+\hline
+Battery capacity $[kWh]$& - &- \\
+\hline
+Engine name& 2x DEUTZ TCD 16.0& -\\ 
+\hline
+Max tractive effort $[kN]$&100&100\\
+\hline
+Rated power $[kW]$& 748& 1000\\
+\hline
+$f_r$& 0,007& 0,007\\
+\hline
+A $[m^2]$ &11,6 &11,6\\
+\hline
+$C_x $&1,1& 1,1\\ 
+\hline
+Net mass $[kg]$&95000 &95000\\
+\hline
+r $[m]$& 0,44 &0,44\\
+\hline 
+$\mu $&0,35 &0,35\\ 
+\hline
+$m_{adhesion}$& 0,5 &0,5\\
+\hline 
+Auxiliaries power $[kW]$ &70& 70\\
+\hline
+$\beta$4& 0,05& 0,05 \\
+\hline
+Specific fuel consumption $[g/kWh]$&199&-\\
+\hline
+\end{tabularx}
+\
+
+The data was collected from various sources: 
+\begin{itemize}
+\item From Stadler and Deutz product brochures: model name, passenger capacity, fuel type, engine characteristic curve, wheel radius and the specific fuel consumption. 
+\item Some parameters were computed from the available data: the front area was computed from the vehicle dimensions and the curb mass was computed from the maximum allowed weight on the axels. The beta factor was hypothesised knowing the number of wheels per vehicle and that the moment of inertia of a wheel is about 90 kg*m2: knowing this, we computed the equivalent mass and divided by the curb mass. 
+\item The power of the auxiliaries was hypothesised basing on product brochures by the heat pump manufacturer Konvekta. The values were rounded up to account for the fact that there are auxiliaries other than air conditioning or heating, such as lighting and compressors. 
+\item The remaining parameters were deduced from the literature \cite{8} which has also been used to check if the other values were plausible. 
+\end{itemize}
+\newpage
+\subsubsection{Results}
+The following table reports the results of the simulation. Mechanical brakes were always used, as the engine brake alone would not be enough to stop the train in time: in addition to this, target speed for the ICE train was lowered to 80 km/h, instead of 90 km/h, as the limited power of the vehicle would not allow it to reach the target speed before braking. In all simulations the passenger load was assumed to be half of the maximum capacity. The train was used to stop for 60 seconds at stations. Two separate simulations were conducted for the variants in the train route, despite they share a great part of the path. The value of motor power when braking is not accurate, as the model considers the total dissipated power, thus that absorbed by the motor and dissipated through the mechanical brakes.\\
+
+\textbf{Airport – Kinshasa Gare Centrale}\\
+
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X|}
+\hline
+\textbf{Train} & \textbf{Wink} & \textbf{Wink Electric}\\
+\noalign{\hrule height 1.2pt}
+Travel Time $[min]$ &34,1&32,7\\ 
+\hline
+Average speed $[km/h] $&35,3 &36,9\\
+\hline
+Electricity consumption $[kWh]$ &274,3& 314,3 \\
+\hline
+Fuel consumption $[L] $&65,6& -\\ 
+\hline
+\end{tabularx}
+\
+
+The following pictures show the speed of the vehicle, its acceleration and the motor power over the position along the route and time: 
+\begin{figure}[H]
+\centering
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=23cm]{train1}}
+\caption{Airport – Kinshasa Gare Centrale – Motor power, speed and acceleration over space and time: Wink ICE}
+\end{figure}
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=23cm]{trainel1}}
+\caption{Airport – Kinshasa Gare Centrale – Motor power, speed and acceleration over space and time:  Wink Electric}
+\end{figure}
+
+\textbf{Airport-Kinshasa Gare Ouest}\\
+
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X|}
+\hline
+\textbf{Train} & \textbf{Wink} & \textbf{Wink Electric}\\
+\noalign{\hrule height 1.2pt}
+Travel Time $[min]$ &48,2&46,2\\ 
+\hline
+Average speed $[km/h] $&34,2 &35,6\\
+\hline
+Electricity consumption $[kWh]$ &367,2& 424,3 \\
+\hline
+Fuel consumption $[L] $&87,8& -\\ 
+\hline
+\end{tabularx}
+\
+
+The following pictures show the speed of the vehicle, its acceleration and the motor power over the position along the route and time:
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=23cm]{train2}}
+\caption{Airport – Kinshasa Gare Ouest– Motor power, speed and acceleration over space and time:  Wink ICE}
+\end{figure}
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=23cm]{trainel2}}
+\caption{Airport – Kinshasa Gare Ouest– Motor power, speed and acceleration over space and time:  Wink Electric}
+\end{figure}
+\subsection{Vertical vibration comfort on a Mercedes-Benz Capacity L}
+The Mercedes-Benz Capacity L was chosen among the vehicles tested for the longitudinal dynamics as it has an ICE engine, it has overall good performance and, especially, due to the high availability of data regarding its suspensions. The vehicle has been modelled using multiple quarter-vehicle 2-DOFs models, one for each vehicle axle, except for the last two. The motor axle and the trailing axle have been modelled as a single one, given the fact they are close to each other: this is a good hypothesis when dealing with vertical dynamics and road irregularity, while if one had to evaluate the effect of higher steps, such as speed bumps, a more complicated model would be necessary. The following picture shows a lateral view of the vehicle: 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=2cm]{capacityL}
+\caption{Lateral view of a Capacity L}
+\end{figure}
+The front axle is a RL75EC and the following picture shows its geometry: 
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth, height=7cm]{RL75EC}}
+\caption{Front view of an RL75EC axle}
+\end{figure}
+\newpage
+The centre axle is a AV132 and the following picture shows its geometry: 
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth, height=7cm]{AV132}}
+\caption{Front view of an AV132 axle}
+\end{figure}
+The motor axle is a AV133 (the equivalent of the AV132 with a link for the cardan joint) and the following picture shows its geometry: 
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth, height=7cm]{AV133}}
+\caption{Front view of an AV133 axle}
+\end{figure}
+\newpage
+The following picture shows the whole geometry of a suspension regarding a AV132/AV133 axle: 
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth, height=9cm]{topav}}
+\caption{Top view of anAV133 axle}
+\end{figure}
+The trailing axle is a RL72A, which can steer as well to assist the handling of the vehicle, and the following picture shows its geometry: 
+\begin{figure}[H]
+\makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth, height=7cm]{RL72}}
+\caption{Front view of an RL72A axle}
+\end{figure}
+Unfortunately, despite giving precise information about the geometry and the weight of the axles, ZF does not provide any hint about the stiffness and the damping of the suspension, so values had to be sought in the literature\cite{9}. The central and the motor, the front and the trailing axle have been supposed to have the same kind of suspensions; for modelling purposes the stiffness and the damping of the motor and trailing axle were summed as if it was a single suspension. The literature does not report a single value for damping and stiffness of the suspension, as they are designed to adapt to passenger load; despite this, we choose the smaller value as the nominal one for our analysis, as our goal is maximising comfort, without caring specifically of other effects, such as handling.\\
+The following table reports the nominal values used for vertical dynamics simulations:\\
+\\
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X|}
+\hline
+&\textbf{Front axle} & \textbf{Centre axle} & \textbf{Drive+trailing axle}\\
+\noalign{\hrule height 1.2pt}
+Tyre stiffness $[N/m]$ k1& 500000 &1000000 &1500000\\
+\hline 
+Tyre damping $[N/ms]$ c1& 150 &300 &450\\ 
+\hline
+Suspension stiffness $[N/m]$ k&295000 &190000& 285000\\ 
+\hline
+Suspension damping $[N/ms]$ c2& 15000& 21000& 36000\\
+\hline
+Unsprung mass $[kg]$&241& 383,5 &558\\
+\hline
+Load fraction &0,2 &0,26& 0,54\\ 
+\hline
+Curb sprung mass $[kg]$ &2024 &2631 &5465\\
+\hline
+Max passengers &19 &25& 52\\
+\hline
+\end{tabularx}
+\subsubsection{Results}
+The following graphs show the displacement, the speed and the acceleration of the sprung and unsprung mass of the front axle: from the acceleration plot one can clearly see the filtering effect of the suspension. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=6cm]{displacement}
+\caption{Comparison of road, spung and unsprung mass displacement at the front axle}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=6cm]{velocity}
+\caption{Comparison of spung and unsprung mass vertical speed at the front axle}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=6cm]{acceleration}
+\caption{Comparison of spung and unsprung mass vertical acceleration at the front axle}
+\end{figure}
+The response of the system under varying conditions of speed, load, road class, stiffness, damping and position along the bus has been simulated.\\
+The following table describes all the considered scenarios and shows the value of the RMS of the acceleration for each case. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=3cm]{synteticresults}
+\caption{Overview of vertical dynamics simulation scenarios with synthetic results}
+\end{figure}
+Although the vehicle suspension behaviour is not strictly linear, some conclusions can be drawn from these values: 
+\begin{equation}
+v \uparrow, m \downarrow, Road\;irregularity \uparrow, k \uparrow, c \uparrow \rightarrow Comfort \downarrow
+\end{equation}
+\begin{center}
+\textit{Most importantly, do not seat in the middle of the bus!}
+\end{center}
+
+Here are the FRFs and the space diagrams of the suspension associated to each study case. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=10cm]{vehicleposition}
+\caption{Vertical dynamics simulation results: sensitivity to position along the vehicle}
+\end{figure}
+The FRF for acceleration of the centre axle suspension has a high resonance peak and decays slowly at high frequencies, causing a greater amplification of road irregularity, thus discomfort. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=10cm]{passengerload}
+\caption{Vertical dynamics simulation results: sensitivity to vehicle mass}
+\end{figure}
+The FRF for acceleration of the empty bus has a high resonance peak and decays slowly at high frequencies, causing a greater amplification of road irregularity, thus discomfort. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=10cm]{roadclass}
+\caption{Vertical dynamics simulation results: sensitivity to road class}
+\end{figure}
+From the space plot of road irregularity one can notice that the maximum step for a class C road has double the hight compared to the maximum step of a class B road.
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=10cm]{roadclass}
+\caption{Vertical dynamics simulation results: sensitivity to longitudinal speed}
+\end{figure}
+The FRF for acceleration of the fast bus has a high resonance peak and decays slowly at high frequencies, causing a greater amplification of road irregularity, thus discomfort. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=10cm]{damping}
+\caption{Vertical dynamics simulation results: sensitivity to damping}
+\end{figure}
+Despite being the resonance peak of the free tunings of the suspension equally high, the under damped suspension acceleration FRF has a lower average value and decays more quickly at high frequency, thus resulting in better comfort. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=10cm]{stiffness}
+\caption{Vertical dynamics simulation results: sensitivity to suspension stiffness}
+\end{figure}
+The acceleration FRFs are all almost the same; the only significant difference is that in stiffest suspension has a clearly visible second resonance peak at low frequency. 
+\newpage
+\subsection{Ground vibrations}
+The force transmitted by running vehicles to the ground is responsible for both noise generation, road consumption and damage. The mechanisms of noise generation and of road erosion are complex, thus the analysis which has been performed is limited to the evaluation of force transmitted to the ground and the subsequent road deformation. The goal of the analysis is to study the impact of vehicle and road characteristics on force transmission: the evaluated parameters are the vehicle weight, the vehicle forward speed, the suspension stiffness and damping and road class. 
+\subsubsection{Modelling}
+The road and the vehicle have been modelled as single degree of freedom systems, one on top of the other. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=6cm, height=10cm]{ground}
+\caption{Road-vehicle interaction model}
+\end{figure}
+The vehicle is modelled using a single degree of freedom model, considering that all vehicle weight is condensed in one point: the equivalent stiffness and damping of the suspension are computed from the values for the single axle, reported in the Vehicle Comfort section. First, the road displacement power spectrum Zr is computed, using the same procedure described reported in the Vehicle Comfort section. Second, the vehicle suspension FRF is computed as:
+\begin{equation}
+H(f)=\frac{k+i\omega c}{-\omega^{2}m+i\omega c+k}
+\end{equation}
+Where k, m and c are the equivalent stiffness, mass and damping of the vehicle. Then, the force transmitted to the road is computed as: 
+\begin{equation}
+F_{TG}=m\omega^{2}Z_{r}H(f)
+\end{equation}
+The FRF of terrain in response to an external force is computed as: 
+\begin{equation}
+H_{G}(f)=\frac{1}{-\omega^{2}m_{G}+i\omega c_{G}+k_G}
+\end{equation}
+Where $m_{G},\;c_{G}\;and\;k_{G}$ are the equivalent mass, damping and stiffness of ground, which are computes as: 
+\begin{equation}
+m_{G}=\frac{k_{G}}{(2\pi f_{0})^{2}}
+\end{equation}
+\begin{equation}
+c_{G}=2m\omega_{0}h_{G}
+\end{equation}
+Where $f_{0}\;and\;h_{G}$ are the equivalent natural frequency and the damping ratio of the ground. Finally, ground displacement is computed as: 
+\begin{equation}
+z_{G}=H_{G}(f)F_{TG}
+\end{equation}
+\subsubsection{Simulation and results}
+The input data use for the simulation is reported below:\\
+\
+\begin{table}[H]
+\centering
+\begin{tabularx}{1\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X
+  | >{\centering\arraybackslash}X|}
+\hline
+\textbf{Parameter} & \textbf{Unit} & \textbf{Value}\\
+\noalign{\hrule height 1.2pt}
+Total suspension stiffness (k) &[N/m] &957'983\\
+\hline
+Total damping (c) &[N/ms] &1777 \\
+\hline
+Curb mass (m) &[kg] &20'240\\
+\hline
+25\% passenger load mass (m)& [kg] &23'344\\
+\hline
+100\% passenger load mass (m) &[kg] &632'655\\
+\hline
+Ground stiffness $(k_{G})$ &[N/m]&$ 10^9$\\ 
+\hline
+Ground damping ratio $(h_{G})$& [-] &0,4\\
+\hline
+Ground natural frequency $(f_{0})$& [Hz] &40\\
+\hline
+\end{tabularx}
+\end{table}
+\
+
+The simulated scenarios and the synthetic output are reported below:\\
+\
+
+\begin{table}[H]
+{\centering
+\begin{tabular}{|p{5cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1.3cm}|p{1.3cm}|p{1cm}|}
+\hline
+Speed [km/h] &30 &70 &30& 30 &30& 30 &30 \\
+\hline
+Road Class &B& B& B& C &B &B& B\\
+\hline
+Passenger Load &0,25& 0,25 &1 &0,25 &0,25 &0,25 &0,25\\
+\hline
+Altered suspension parameter &None& None &None &None& $k +50\%$&$k -50\%$& c  2x \\ 
+\hline
+$F_RMS [kN]$ &37& 50,7& 39,3 &74,1&58,3 &17,6 &25,3\\
+\hline
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm, height=9cm]{parameter}
+\caption{Comparison of parameter influence on force transmitted to the ground}
+\end{figure}
+The model also returns graphical representations of the results: here are two examples. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=12cm]{stifness1}
+\caption{Output of a sensitivity analysis on bus suspension stiffness effect on force transmitted to the ground and on road displacement}
+\end{figure}
+Vehicle suspension stiffness has a great influence on the force transmitted to the road; however, one problem when acting on this parameter is that tyre stiffness is an order of magnitude higher than proper suspension stiffness, making fine tuning hard. The same applies to damping. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=12cm]{damping1}
+\caption{Output of a sensitivity analysis on road class effect on force transmitted to the ground and on road displacement}
+\end{figure}
+As expected, the rougher the road surface, the higher the force transmitted to the road. This explains the vicious cycle which causes road erosion to accelerate as the road condition gets worse. 
+\newpage
+\section{Service planning} %%%%%section 6
+In this section the iterative process of frequency setting and fleet sizing is described. 
+The procedure, which is used for BRT line 1, circular line and train line 1, starts with hypothesizing the total number of passengers, and from that calculating the frequency, then the headway and finally the number of vehicles, using the following formulae:
+
+\begin{equation}
+Frequency=max\left(\frac{P}{D},F\;min\right)
+\end{equation} 
+Where:
+\begin{itemize}
+\item P is the total number of passengers per unit of time per direction;
+\item D is the maximum capacity of the bus;
+\item Fmin is the minimum frequency*.
+\end{itemize}
+*(When the frequency generated by this equation is unacceptably low because of low density area, a minimum frequency policy is commonly applied in practice)
+\begin{equation}
+Headway=\frac{1}{F}
+\end{equation}
+Where \textit{F} is the frequency previously calculated.
+\begin{equation}
+Number\;of\;vehicles=2*\left(\frac{T}{H}\right)
+\end{equation}
+Where:
+\begin{itemize}
+\item \textit{H} is the headway;
+\item \textit{T} is the total travel time per direction; 
+\end{itemize}
+To make more precise calculations it must be considered that the number of passengers is not equally distributed throughout the operational time span of the day, but follows a precise pattern clearly showed in the following graph:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm, height=4cm]{timeslots}
+\caption{Daily distribution of trips \cite{japan}}
+\end{figure}
+There are three peak hours during the hole day: the most important is between 6 and 8, the others are between 11 and 13 and between 16 and 18. It is assumed that those are the hours where most people travel due to work and school purposes. This means that the sizing of the services line must consider also this variability of the demand in order to guarantee the service for all passengers.\\
+Both services are scheduled to operate 16 hours a day, from 6:00 to 22:00. The 16 daily operating hours are divided into six time slots and the expected passengers are calculated as a proportion of the 200000 daily passengers according to the trend of the number of trips that is shown in the previous image. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm, height=4cm]{timeslots2}
+\caption{Daily distribution of trips \cite{japan}}
+\end{figure}
+With this assumption is possible to calculate a more specific frequency, headway and number of vehicles based on time slots. 
+\subsection{BRT Line 1}
+Since there is not yet a BRT line in Kinshasa it was decided to take inspiration from another African city where actually there is one: Lagos, that has approximately the same size and the same number of inhabitants of Congo’s capital. 
+From various studies made on the line in Lagos we detected that the expected average daily ridership is around 220’000 people. Since Kinshasa is a little bit smaller, we considered for our calculation an expected average daily ridership of 200’000 people.\\
+Here are shown the calculations for all the six time slots for each type of bus. 
+\begin{figure}[H]
+{\centering
+\includegraphics[width=12cm, height=12cm]{dimensioningbrt}
+\caption{BRT dimensioning}}
+\end{figure} 
+The maximum number of vehicles needed is shown in the table in the 6-8 time slot, in which are considered 60000 total passengers, this means that not all the buses operate for 16 hours during the day.\\
+This safety margin makes it possible to take into account various considerations: 
+\begin{itemize}
+\item the sizing is carried out considering the maximum number of passengers on board for each type of bus, which is not truthful because there can be rides with less people on board; in addition, the total travel time calculated do not take into account the load of a full passengers bus;  
+\item at the two terminals the buses must change direction and this time is not considered into calculations; 
+\item the electric buses must recharge at least one time during the day.
+\end{itemize}
+\newpage
+\subsection{Circular line}
+For the circular line, the the assumptions to be taken into consideration are the same as for the BRT line and the train line, except for the estimated daily number of passengers, which in this case is 20,000 people. This number is purely assumed on the basis of the following assessments:
+\begin{itemize}
+\item the total length of the line is about 20 kilometers, as opposed to the BRT line which covers about 61 kilometers round trip; \item the trips in Kinshasa are mainly for workers who move from the extra-urban residential areas to the center, so the circular line covers only a small part of the demand as it only operates in the city center; 
+\item journeys within the central area of the city cover relatively short distances and many people may prefer lighter vehicles than minibuses which handle traffic better. 
+\end{itemize}
+The formulas used for sizing are the same as described above, except for the number of vehicles, which in this case is calculated as $N = T/H$ as it is a circular line.\\
+Here are shown the calculations considering the different time slots.\\
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm, height=12cm]{circularsizing}
+\caption{Circular line dimensioning}
+\end{figure} 
+\newpage
+\subsection{Train line 1}
+In order to carry out the calculations for the tran line the same assumptions of the BRT line are considered: the expected average daily ridership is 200000 people, the operating time is 16 hours, from 6 to 22, using the same formulas we obtain the following results:\\
+\begin{figure}[H]
+{\centering
+\includegraphics[width=12cm, height=12cm]{timeslotstrain}
+\caption{Train line dimensioning}}
+\end{figure} 
+\
+
+Due to the same assumptions that have been made for the BRT line sizing, the minimum number of trains needed is the one carried out in the 6-8 time slot. 
+As seen in the previous table, the headway needed is too low and not acceptable due to safety and signalling problems to be satisfied, so the solution is to run the train in double composition, so transporting the double of passengers with each train, with this composition the following results are obtained:
+\begin{itemize}
+\item \textit{Frequency: 18 trains/h}
+\item \textit{Headway: 197 s}
+\item \textit{Number of vehicles: 29 (so 58 carriages)}
+\end{itemize}
+\newpage
+\subsection{BRT station sizing}
+\textbf{The concept}\\
+The concept of the BRT Station Capacity Analysis Methodology was explored to assist with high-level planning and decision making on corridor design. It is a method of analyzing the major components of a public transport station based on the calculated capacity of the component and the associated Level of Service criteria.\\
+In order to optimize station design, it is necessary to assess the capacities of each element so appropriate design decisions can be undertaken.\\
+The station capacity is the passenger demand volume during the peak hour: in other words, the maximum number of passengers that can be facilitated by a station during the peak hour, getting through the station and into a bus needs to be as easy as possible to minimize the beginning and the end portions of traveling by BRT.\\
+Sustainability does not only mean “eliminating negative environmental impact completely through skillful, sensitive design” but it calls for designers not to waste anything, including money, time and resources in order to design in a sustainable manner, aspects of design that may lead to a waste of materials or expenditure need to be identified and changed.\cite{BRTsizing}\\
+\
+
+\textbf{The methodology}\\
+Stations are the overarching infrastructure that facilitates the movement of passengers through the payment system and into the buses. The station capacity is defined by the component with the lowest capacity, this component influences the system and is therefore important to identify.\\
+Before starting the calculation is better to introduce a performance parameter called LOS (level of service) provided by TCQSM (transit capacity and quality of service manual)\cite{tqdm}, in the table below are indicated the ones suitable for the calculations.\\
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=4cm]{los}
+\caption{LOS parametres}
+\end{figure} 
+In the picture below is possible to notice a typical BRT station composed by different areas:
+\begin{enumerate}
+\item entranceway 
+\item stairway 
+\item fare gate 
+\item paid area 
+\item doorway 
+\end{enumerate}
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=4cm]{brtstation}
+\caption{Typical BRT station layout}
+\end{figure} 
+\begin{enumerate}
+\item  The entranceway is the narrowest section of a pedestrian’s path into the paid area of a station, the width of the entranceway is further reduced by a buffer width (0,25-0,3 m) adjacent to the walls or handrails on either side of the walkway, the capacity of an entranceway is calculated using the equation below:
+\begin{equation}
+C_e=W_{eff}*V_{LOS}*60
+\end{equation}
+Where:
+\begin{itemize}
+\item $C_e$: entranceway capacity (passengers/hours);
+\item $W_{eff}$: effective width of the entranceway (m);
+\item $V_{LOS}$: LOS elated passenger flow (passengers/ m / minute).
+\end{itemize}
+\item The stairway capacity is the number of people that can cross a section of the stairway in an hour. This is calculated using the same equation as in point 1, but has a lower LOS related passenger flow rate because people move more slowly on stairs, especially when going up stairs.
+\item Fare gates are used for off-board fare payment: public transport users need to tap their ticket or smart card to unlock the gate and access the paid area of the station.
+\begin{equation}
+C_{fg}=N_{fg}*C_{fg1}*60
+\end{equation}
+Where:
+\begin{itemize}
+\item $C_{fg}$:fare gate capacity ($passengers/ hour$);
+\item $N_{fg}$: number of gates;
+\item $C_{fg1}$: operational service rate of 1 gate.
+\end{itemize}
+The operational service rate of fare gates do not have an associated LOS, but rather, the upstream queue space can be evaluated with a LOS; the	upstream queue space is the area required to hold passengers while they wait to enter the station through the fare gates. The LOS, in this case, is more an indication of the comfort of passengers rather than a capacity measure. 
+\item The paid area is the area between the fare gates and the emergency exit, this, as the name suggests, is the area that a passenger can be in only once they have paid. The paid area consists of platforms and circulation space to accommodate both waiting and moving passengers.\\
+The major factors influencing the capacity of a paid area are the platform, circulating area and the frequency of buses: the more buses arrive per hour, the faster the turnover of passengers in the paid area. 
+\begin{equation}
+C_{pa}=\left[\left(\frac{A_{p}}{A_{losw}}*N\right)+\left(\frac{A_{ww}}{A_{losc}}\right)\right]*f
+\end{equation}
+\begin{itemize}
+\item $C_{pa}$: paid area capacity ($passengers/ hour$) 
+\item $A_p$: platform area ($m^2$)
+\item $A_{losw}$: LOS waiting area required per person ($m^2/passenger$)
+\item $N$: number of platforms
+\item $A_{ww}$: circulating and walkaway area ($m^2$)
+\item $A_{losc}$: LOS circulating area required per person  ($m^2/passenger$)
+\item $f$: frequency ($bus/hour$)
+\end{itemize}
+\item The doorway capacity is the total number of people that can pass through the station and bus doors into or out of the bus in an hour. 
+\begin{equation}
+C_d=w*N_d*V_{LOS}*f*t_{d}
+\end{equation}
+Where:
+\begin{itemize}
+ \item $C_{d}$: door capacity ($passengers/ hour$) 
+\item $w$: width of the doors ($m$)
+\item $N$: number of doors
+\item $V_{LOS}$: maximum passenger flow ($pedestrian/m/minute$)
+\item $f$: frequency ($bus/hour$)
+\item $t_d$: dwell time ($minutes$)
+\end{itemize}
+Door capacity is heavily reliant on the dwell time and frequency of buses.  
+\end{enumerate}
+\textbf{Airport station study}\\
+The airport station for obvious reasons is the one with the major flux of people during the day, so an interesting analysis can be done using the formulas described above. 
+\begin{itemize}
+\item Entranceway capacity
+\begin{equation}
+\begin{gathered}
+C_{e}=W_{eff}*V_{LOS}*60 
+\\
+C_{e}=(2-0.6)*66*60=5544 \:(passengers/hour) 
+\end{gathered}
+\end{equation}
+\item Stairway capacity
+\begin{equation}
+\begin{gathered}
+C_{e}=W_{eff}*V_{LOS}*60 
+\\
+C_{e}=(2-0.6)*43*60=3612 \:(passengers/hour) 
+\end{gathered}
+\end{equation}
+\item Paid area capacity
+\begin{equation}
+\begin{gathered}
+C_{pa}=[(A_p/A_{LOSWx}*N)+[A_{ww}/A_{LOSC}]*f
+\\
+C_{pa}=\left[\frac{20*2}{0.3}+\frac{5}{9}\right]*72=9640 \:(passengers/hour)
+\end{gathered}
+\end{equation}
+\item Doorway capacity
+\begin{equation}
+\begin{gathered}
+C_d= W*N_d*V_{LOS}*f*t_{d}
+\\
+C_d= 1*4*66*72*0.3=5072 \:(passenger/hour)
+\end{gathered}
+\end{equation}
+\end{itemize}
+As it’s possible to see from the calculus above the max number of people that can cross the stairway in an hour are 3612, so is a reasonable number according to the analysis of the project. 
+
+\newpage
+\section{Environmental and Economic analysis}%%%%%section 7
+\subsection{Environmental issues}
+\subsubsection{Energy situation in DRC}
+The DRC's potential to generate energy is high, having a wide range of both renewable and non-renewable energy sources. The DRC's potential renewable sources are hydropower, biomass, solar, wind and geothermal, while the non-renewables are oil, natural gas and uranium. Approximately 96\% of the country's generated domestic power comes from hydropower, with a total installed capacity of about 100'000 MW, mainly in the plants built along the Congo river. While the country has abundance for hydro-based power generation, the country's production from different fossil fuels such as coal and natural gas is modest and very limited.\\
+Here is the outlook of electricity production by source in Democratic Republic of Congo:
+\begin{figure}[H]
+{\centering
+\includegraphics[width=10cm, height=5cm]{energy1}
+\caption{Electricity generation by source, Democratic Republic of the Congo 1990-2019 \cite{iea}}}
+\end{figure} 
+Here an outlook of energy consumptions:
+\begin{figure}[H]
+{\centering
+\includegraphics[width=12cm, height=8cm]{energy2}
+\caption{DRC's renewable energy share of the country's total final consumption 1990-2015 \cite{sdg}}}
+\end{figure}
+\newpage
+\textbf{Key problems of energy sector}\\
+Even though the DRC possesses prosperous and varied resources for energy generation, the energy sector still falls far behind. This is due to the many problems, which the energy sector faces. In order to expand, improve and develop the country's energy sector, these challenges need to be mitigated and fixed. Some of these challenges are listed below:   
+\begin{itemize}
+\item Uncertainty of the country's political situation. 
+\item Lack of investment interest. 
+\item Unreliability of current electricity grids. 
+\item Lack of proper management and governance of the energy sector. 
+\item Insufficiency of the current energy supply. 
+\item The very poor operating and maintenance conditions of the country's energy sector and power systems. 
+\item Lack of needed funds and both financial and technical skills. 
+\item Lack of needed proper policies for the implementation of more renewable energy projects. 
+\item Lack of technological advancements. 
+\item Instability of the economic situation in the country. 
+\item The low level of both proper awareness and needed educational background. 
+\item Absence of a regulatory agency.
+\item Absence of a Rural Electrification Agency.
+\item High taxes, VAT, and import duties.
+\end{itemize}
+\newpage
+\subsubsection{Mining sector}
+Mining is a really important industry for Democratic Republic of Congo, as this country is considered one of the wealthiest in the world in natural resources, especially Cobalt, for the 70\% of all Cobalt extracted worldwide in 2021 \cite{cobalt}, Coltan and Lithium. All these minerals are fundamental components of electronic devices and their demand is constantly increasing, especially for the growing diffusion on electric vehicles.\\
+These mines are the source of many problems:
+\begin{itemize}
+\item \textit{environmental damages}, like loss of biodiversity, deforestation, contamination of waters;
+\item \textit{sociocultural issues}, disputes on possession of resources has lead to many conflicts;
+\item \textit{health impacts of labour}, poor or non-existant safety measures and no rights for miners;
+\item \textit{minor labour}, children at very young age start working in mines.
+\end{itemize}
+These problems are more evident in the so called artisanal mines, which account for the 13\% of all the Cobalt extracted\cite{cobalt}, fortunately their number is reducing ad can be seen in the chart below. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm, height=7cm]{cobalt1}
+\caption{Main mines in RDC \cite{cobalt1}}
+\end{figure}
+\newpage
+\subsubsection{Environmental impacts of scenarios proposed}
+In this chapter a simple comparison between the environmental impact between using diesel or electric vehicles is proposed, for simplicity the impacts are considered in terms of CO2 only.\\
+The analysis will be carried out for the BRT only\\
+
+\textbf{BRT}\\
+For electric vehicles most of their lifecycle emissions are associated with the production, especially of the batteries, which alone accounts for 35-41\% of the total.\cite{40} Clearly the life cycle emissions of Evs depends also on how the electricity used for recharging is produced, in the case of RDC, as described in the previous section, all electricity comes form renewables, so the CO2 emitted during operational phase can be approximated to zero.\\
+Considering all the vehicles analyzed in chapter 5, regarding electrical buses there are two possibile choices:
+\begin{enumerate}
+\item \textbf{Citaro electric}, equipped with Nickel-Manganese-Cobalt 264 kWh batteries,\\
+in this case the environmental impact, as shown in the next chart, is quite high:
+\begin{figure}[H]
+\centering
+\includegraphics[width=8cm, height=5cm]{nmc}
+\caption{Life-Cycle GHG Emissions Associated with Production of NMC LIBs \cite{nmc}}
+\end{figure}
+Choosing the worst case scenario, the total amount of CO2 emitted for the production of the batteries is 59.5 kg/kWh, so the total for the battery pack of the Citaro is 15'708 kg, and considering then the total CO2 produced during the assembly process the result is: 
+\begin{equation}
+total\;CO_2=\frac{15708\;kg}{0.4}=\textbf{39'270\:kg}
+\end{equation}
+(Divided by 0.4 because, as said above, battery production accounts for approx 40\% of total CO2 emitted)
+\newpage
+\item \textbf{Marcopolo BYD D11B}, equipped with Lithium iron-phosphate (\textit{LiFePO4}) 550 kWh batteries. These batteries have a lower impact, as shown in the figure below:
+\begin{figure}[H]
+\centering
+\includegraphics[width=8cm, height=5cm]{life}
+\caption{Carbon footprint flow chart of lithium iron phosphate battery’s raw materials \cite{life}}
+\end{figure}
+In this case the total CO2 emitted for the production of the batteries is 12.7 kg/kWh (extraction) + 15.7 kg/kWh (production) =
+28.4 kg/kWh, so the total for the battery pack of the Marcopolo is 15'620 kg, and considering then the total CO2 produced during the assembly process the result is: 
+\begin{equation}
+total\;CO_2=\frac{15620\;kg}{0.4}=\textbf{39'050\:kg}
+\end{equation}
+
+\end{enumerate}
+So, for both electric buses the impact in terms of CO2 is the nearly the same.\\
+Regarding diesel buses, it must be taken into account that the CO2 emitted for their production is about the half of the amount produced in constructing an electrical bus the same size \cite{40}, but obviously, with ICE vehicles, it must be considered that they emit co2 continuously during operational phase.\\
+The CO2 emitted during production is considered for simplicity the same for all the 3 buses: 11'500 kg.\\
+The component emitted during usage phase (TTW, tank to wheel) depends on the amount of fuel consumed, $\frac{2.66 Kg_{co2}}{L}$ \cite{diesel}, the total amounts for the 3 buses the values are the following:
+\begin{enumerate}
+\item \textbf{Capacity L}: $2.66*25.3=67.3\;Kg\;of\;CO2\;emitted\;per\;trip;$
+\item \textbf{Marcopolo Volvo 18m}: $2.66*22.8=60.7\;Kg\;of\;CO2\;emitted\;per\;trip;$
+\item \textbf{Marcopolo Volvo 25m}: $2.66*26.4=70.2\;Kg\;of\;CO2\;emitted\;per\;trip;$
+\end{enumerate}
+Considering the average CO2 emitted in producing E-buses net of the CO2 emitted in producing Diesel buses, is possible to calculate after how many trips E-buses are more environmentally friendly than diesel buses.
+\begin{equation}
+Net\;CO2\;emitted\;by\;E\-buses=39160\;kg-11500\;kg=27660\;kg
+\end{equation}
+\begin{equation}
+Number\;of\;trips=\frac{Net\;CO2\;emitted\;by\;E\-buses}{Average\;CO2\;emitted\;per\;trip\;by\;Diesel\;buses}=\frac{27660\;kg}{66.06\;\frac{kg}{trip}}=419\;trips
+\end{equation}
+So, after 419 trips is more convenient to have an E-bus, in terms of environmental impact.\\
+Considering that each bus makes about 10-11 trips every day, after \textcolor{Red}{42 days} of continuous operation a balance is reached.
+\newpage
+\subsection{Economic analysis}
+In this section the brief economic analysis is carried out for the BRT line 1, comparing the cost of a tradition diesel buses and electric ones during all their lifecycle, estimated in 12 years, the comparison will be done for 18m buses.
+\subsubsection{Infrastructure cost}
+The cost of the infrastructure is common for the two options, an adequate estimate for it is of \textit{2 million US dollars per kilometre}, this assumption is based on the cost of the infrastructure for the Lagos BRT cost 1.7 million US dollars per kilometre back in 2010; this cost includes the construction of the dedicated bus lanes, the stations, the depots and the signalling systems as well as the expropriation of terrains.\\
+So, the total cost of the infrastructure for BRT line 1 in Kinshasa is:\\
+\begin{equation}
+ 2\;\frac{million \$}{km}*30.01\;km=\textbf{60.02 million US dollars}.
+ \end{equation}
+\subsubsection{Fleet cost}
+The costs for the fleet are based on this article \cite{fleet}.\\
+
+\textbf{Diesel bus fleet cost}
+\begin{table}[H]
+\centering
+\begin{tabularx}{0.5\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X|}
+\hline
+\textbf{Parameter} & \textbf{Cost}\\
+\noalign{\hrule height 1.2pt}
+Cost of new bus & \$350'000\\
+\hline
+Cost of Diesel in RDC & \$1.186/litre\\
+\hline
+Maintenance costs & \$0.39/km\\
+\hline
+\end{tabularx}
+\end{table}
+So, considering that 87 18m metre buses to achieve the desired frequency the total cost becomes:\\
+
+$Fleet\:cost=87*350'000=30'450'000 \:US\:dollars.$\\
+
+Considering that the average number of daily trips is 10, and knowing the diesel consumption of each trip as a result of the longitudinal dynamics, which is 23L, the fuel consumed each day is 230L, so 1'007'400 in 12 years, for a total cost of:\\
+
+$Fuel\:cost=1'007'400\:L*\$1.168L=1’176’643\:US\:dollars.$\\
+
+With the average number of trips per day is possible also to calculate the total distance travelled, 1'357'800km and hence the overall maintenance costs:\\
+
+$Maintenance\:cost=0.39\frac{\$}{km}*1'357'800\:km=529'542\:US\:dollars.$\\
+
+The total thus becomes:
+\begin{equation}
+Total\:cost=\underbrace{\$30'450'000}_\text{Initial investment}+\underbrace{\$1'176'643+\$529'542}_\text{Operating costs}=\textbf{32'156'185\:US\:dollars.}
+\end{equation}
+\newpage
+\textbf{Electric bus fleet cost}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{0.5\textwidth}{
+  | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X|}
+\hline
+\textbf{Parameter} & \textbf{Cost}\\
+\noalign{\hrule height 1.2pt}
+Cost of new bus & \$550'000\\
+\hline
+Cost of Electricity in RDC & \$0.083/kWh\\
+\hline
+Maintenance costs & \$0.20/km\\
+\hline
+Cost of the charing infrastructure& \$50'000/unit\\
+\hline
+\end{tabularx}
+\end{table}
+Considering that in case of electric buses, 93 of them are needed, so the fleet cost becomes:\\
+
+$Fleet\:cost=93*550'000=51'150'000 \:US\:dollars.$\\ 
+
+In the case of electric fleet there is another initial cost to endure, which is the cost of the charging infrastructure; because of the low availability and stability of the electric grid in RDC that may not be able to sustain high power peaks, the charging infrastructure is composed of only AC chargers that operate during nighttime and during low demand hours when most of the fleet is in the depot. Considering a charger for each bus the total cost of it hence becomes:\\
+
+$Charging\;infrastructure\;cost=93*\$50'000=4'650'000\;US\;dollars$\\
+
+The total electricity consumed is calculated also in this case considering 10 trips per day, so the total electricity consumed is 3'328'800 kWh in 12 years, so hence the total cost becomes:\\
+
+$Total\;electricity\;cost=3'328'800\:kWh*0.083\frac{\$}{kWh}=276'290\;US\;dollars$\\
+
+Last one is the maintenance cost, using the same formula as for the diesel buses:\\
+
+$Maintenance\:cost=0.20\frac{\$}{km}*1'357'800\:km=271'560\:US\:dollars.$\\
+
+The total thus becomes:
+\begin{equation}
+Total\:cost=\underbrace{\$51'150'000+\$4'650'000}_\text{Initial investment}+\underbrace{\$276'290+\$271'560}_\text{Operating costs}=\textbf{56'347'850\:US\:dollars.}
+\end{equation}
+\newpage
+\subsubsection{Comparison and considerations}
+It can be clearly seen that the overall cost is way higher in the case of electric fleet, this was expected because electric buses are way more expensive than traditional diesel ones, but, on the other hand the operating costs are way less, less than a third; from these results different conclusions can be extracted.\\
+In the case of availability of great amounts of capital, or a large number of investors willing to fund the project, choosing electric buses (battery electric buses, or even better trolley buses) would be the best choice, especially in the long term, both for economic and environmental reasons.\\
+But, in case of low income countries, like RDC, there is the necessity of immediate intervention now and investors may not be willing to risk in investing a large amount of capital in unstable countries, with a high amount of uncertainty, so it is better to minimize the expenses in the present. With the same amount of invested capital it is better to have 90 diesel buses than 50 electric ones, even though the CO2 emission are higher, the impacts of a better service of public transportation are greater  reducing congestion and allowing more people to move faster and safer to increase their life quality.\\
+Then, after some years of good operation of the service with high levels of occupancies it would make sense to make a transition to a completely electric fleet.\\
+In the chart below the difference of the costs can be easily seen:
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=7cm]{barchart}
+\caption{Comparison of costs between diesel and electric fleet}
+\end{figure}
+\newpage
+\section{Signalling} %%%%section8
+\subsection{Introduction}
+In this section the signalling system of the BRT is described in detail.\cite{signalling}\\
+Signalling in a street becomes very important when there are interactions between vehicles and people, mostly in intersections. The greatest number of conflicts occurs when there are changes of traffic flow caused by the street modification or by a new distribution of people due to a shift in the city structure; in these cases, is necessary  to intervene and to redesign the signalling of the concerned street.\\
+Interventions start with zebra crossings and yield signs, while larger interventions involve channeling the vehicles and creating refuge islands.\\
+The achievement of an intervention is to find the best compromise between the flow-efficiency of the street, the safety of pedestrians and maintaining the lowest pollution rate considering also not to increase excessively the costs.\\
+So, practically, the procedure is the following: choose an intersection to intervene on and how to modify it, calculating the average traffic speed, the delay, the PCU (Passenger Car Unit), the flow rate (number of vehicles crossing a transversal section divided by the time), the capacity and the saturation of the street, evaluating with the costs if it is worth it. 
+It is also important considering the traffic signals and the traffic lights. With them it can be established times of crossing and phases (movements doable at the same time in an intersection). So, the parameters involved are the effective green time, the cycle time (time between two following green lights), the red time and the lost time. The ensemble of this values makes the “Traffic Light Plan”, that usually can be represented in graphs as the one below.
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=6cm]{signalling1}
+\caption{Signalling scheme}
+\end{figure}
+As shown, for each approach during effective green time, flow starts at saturation until the queue dissolves or the effective green time turns off. And for each approach during red time, there is queue formation, and lost time happens when neither approach has flow.\\
+Timer of day should be taken in consideration, in fact traffic signal programming shall change throughout the day, so that green and red cycle times must change based on different programming for the time of the day (as well as week and season) and, where available, change based on traffic detection applied to parameters in the programming for that moment. 
+The coordination between traffic light can be useful to create a green wave for pedestrians and cars, therefore some intersections will need to have irregular green times for the transversal flows. 
+The parameters to consult are the intersection capacity, the relative green, the relative red (ratios between green and red time divided by the cycle time) and the saturation level. 
+\subsection{Intersection design}
+BRT systems are generally built on corridors where mixed-traffic congestion is already a problem, or where congestion is likely to occur in the near future; otherwise there would be no benefit in building a segregated busway. 
+Intersections are critical to stations, as they represent an important point along any BRT corridor. A poorly designed intersection or a poorly timed signal phase can substantially reduce system capacity and speed, especially by hindering access to stations.\\
+Generally, the three main objectives of intersection design along a BRT corridor are: 
+\begin{enumerate}
+\item Provide safe and convenient crossings for pedestrians; 
+\item minimize delay for BRT vehicles;
+\item minimize delay for mixed traffic. 
+\end{enumerate}
+Travel times for walking trips are improved by following these objectives, but it should be noted that pedestrians’ safety and accessibility have the highest priority.\\
+Some methods consider pedestrian times in order to analyze alternatives, and the approach discussed here does not equalize pedestrians by inputting delays into the process. Current procedures mostly try to fit demand needs into the available space so that pedestrians can make all crossings safely; bus lane queues are not so long that they block stations; and desired car movements are still possible, all without worsening congestion.\\
+BRT system planners have used the following tools to rationalize intersections: 
+\begin{itemize}
+\item  simplify the BRT system’s routing structure to optimize turning movements into the corridor; 
+\item optimize the number of intersections along the corridor; 
+\item restrict as many mixed-traffic turning movements on the BRT corridors as possible; 
+\item optimize the location of the station relative to adjacent intersections; 
+\item optimize the signal phasing and consider signal priority for public transport vehicles.  
+\end{itemize}
+The imagine below represent a typical major intersection on a BRT corridor in Guangzhou, China. Note that the station of the BRT corridor is located away from the intersection with Chibei Avenue, and in order to turn across traffic, the two-phase intersection requires a U-turn in the perpendicular road. Before the BRT, this four-phase intersection was a major traffic-congestion point. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm, height=6cm]{signalling2}
+\caption{Typical BRT intersection}
+\end{figure}
+As a first step to intersection design, BRT system planners should carefully review the existing mixed-traffic bottlenecks in the corridor. A small number of bottlenecks are often responsible for the vast majority of mixed-traffic delay. These bottlenecks are usually due to one or more of the following conditions: 
+\begin{itemize}
+\item narrow bridges and tunnels; 
+\item traffic convergence points; 
+\item poorly regulated/enforced parking; 
+\item suboptimal timing at traffic signals; 
+\item improperly designed and channeled intersections; 
+\item badly placed bus stops or unregulated stopping of public transport vehicles. 
+\end{itemize}
+Once the basic routing structure of the new BRT system has been determined, system designers should have a reasonable idea about likely vehicle frequencies within the system.\\
+Considering the placement of the BRT corridor and its requirements, the non-intersection bottlenecks should be addressed first. These problem points can generally be resolved through a combination of tightening parking regulation and enforcement, strengthening vendor regulation and enforcement, narrowing medians, improving parallel roads, or widening roads if all else fails.\\
+Once the implementation of the new BRT system requires changing the intersection design anyway, the opportunity should be taken to improve the overall efficiency of the intersection. Packaging these intersection improvements with the introduction of the new BRT system will help improve public acceptance of the new BRT system. The less efficient the intersection was before the BRT system, the greater the potential there will be to design the new system in a way that improves conditions for both public transport passengers and mixed traffic. 
+Very important is to consider the signal delay, it can vary changing the red and green time. 
+An example is shown in the table, considering a time cycle of 80 seconds, a frequency of 200 articulated-bus/hour, 1 BRT lane and a saturation flow per lane of 720 art-bus/hour/lane, we can see the different values of delays and demands. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=8cm, height=10cm]{signalling3}
+\caption{Signalling cycle}
+\end{figure}
+If demand-to-signal capacity level is greater than 0.65, random delay becomes significant, and the project design should be changed to give a higher proportion of green time, and/or a second BRT lane on the approach to the intersection should be considered.
+\subsection{Traffic Signal Priority}
+The signal priority is divided in two categories: 
+\begin{enumerate}
+\item passive signal priority;
+\item active signal priority.
+\end{enumerate}
+The \textbf{passive signal priority} is about the cycle time and the green light time, cause, not considering the BRT, the optimal phase time in a signalized intersection is such that the cycle time is as brief as possible without growing queues. 
+However, the ideal way to balance the traffic light, is to consider the average wait time by each flow, including pedestrians multiplied by the number of people in each flow.\\
+The typical cycle time is from 60 seconds to 120 seconds (during peak time) and the green light time shall be the 50\% of the cycle time (for example, 30 seconds of green light time for the BRT on a cycle time o 60 seconds). 
+Green wave is not usual in BRT service cause of the variability, but in Ottawa (Canada), due to the major time predictability, it exists a system that tries to coordinate green lights in BRT lane to increase the efficiency of the service and give more priority.\\
+The \textbf{active signal priority} is called also “real-time priority techniques” and it consists in the positioning of controllers in intersections that detect the BRT passage and give it the priority of the green light.\\
+If the detection occurs during the red or the yellow interval, the green time is recalled more quickly than normal. Some general guidelines for applying phase extension or phase shortening include: 
+\begin{itemize}
+\item the minimum side street green time is set based on the amount of time pedestrians need to cross the road; 
+\item the amount of green signal extension or advance should be up to a specific, set maximum; 
+\item the BRT corridor green is not generally both advanced and extended in the same cycle. 
+\end{itemize}
+This system is more efficient where the density of BRT vehicles is low.\\
+There is a successive step for active detection that is to base priority on observed traffic levels for both BRT levels and the general traffic. A special weighting can be given to BRT vehicles or to the BRT corridor. In traffic systems where flows are quite irregular, real-time control that adjusts signal times to observed traffic levels can yield benefits. In such real-time systems, phase changing is usually based on a trade-off between the benefits and costs faced by the green and red approaches and for the general principle of shortening red times; a fully actuated system based on total vehicle movements, which also includes BRT vehicles, is probably more important than BRT-specific detection. 
+\subsection{Stations localization}
+Intersection and station design should minimize the added travel time of all customers. The station location in relation to the intersection will affect the BRT system’s flow, speed, and required right-of-way. Pedestrian travel times, which seem to be the more obvious reason for determining a station’s location, are far less relevant than they first appear.\\
+Because conditions vary from intersection to intersection, it is generally advisable to find an optimal solution for each intersection rather than to presume that a single solution will always be optimal. The greater the amount of information the planning team has available regarding demand, the easier it will be to evaluate alternatives and find an optimal solution under the existing restrictions.\\
+The following station locations are possible: 
+\begin{itemize}
+\item At the intersection:
+\begin{itemize}
+\item for side-aligned stations, the station can be either nearside or far side—that is, before or after the intersection in each direction; 
+\item for median stations, if not split, the station will be nearside in one direction and far side in the other;
+\end{itemize}
+\item Away from the intersection:
+\begin{itemize}
+\item near the intersection; 
+\item far from the intersection (or mid-block); 
+\end{itemize}
+\item under or over the intersection.
+\end{itemize}
+\subsection{Merging with mixed traffic in narrow sections}
+Sometimes a BRT system must pass through a narrow stretch of road that is impossible to widen. Such areas may include bridges, tunnels, city gates, or flyovers. As shown below, having the BRT running with mixed traffic only in this narrow section may not be too harmful for the public transport system if appropriate measures are taken. 
+This situation can be seen as an intersection (a form of a bottleneck) as there is conflict for using the same space. Usually, the heaviest congestion occurs not on the narrow link but just before it, forming a large queue just to enter onto the bottleneck point.\\
+When the facility itself is not congested, only the approach to the facility, a traffic signal is generally not needed, and it may be better to end the exclusive busway just a short distance before the bottleneck.  
+The head start, however, is useless if the facility itself also becomes congested.\\
+If there is a risk that the bottleneck facility itself may become congested (due to mixed traffic spillback of conflicts ahead of the narrow section), active signal priority based on the detection of mixed traffic should be used, as shown in the imagine below.
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth, height=6cm]{signalling4}
+\caption{Signalling cycle}
+\end{figure}
+\newpage
+\section{Road damage} %%%%section 9
+This section provides a brief analysis of the impacts that the BRT corridor will generate on roads.\\ 
+The direct influence of buses and on pavements and the effects of dynamic load transfer are important elements in evaluating the impacts of bus operations on pavements. In urban areas, pavement deterioration and mostly rutting in bus bays and curb lanes has been identified as a high cost maintenance problem. Repeated passages of vehicles on pavements eventually results in certain types of distresses: fatigue cracking, rutting, or other distress modes as roughness, ravelling and potholes.\\
+However, it is complicated to calculate the axle loads that a pavement section will be subject to over its design life. The historical approach is to convert damage from wheel loads of different magnitudes and repetitions to damage from an equivalent number of standard loads.\\
+The parameter most widely used for analyzing pavement damage is the Load Equivalency Factor (LEF) or Equivalent Standard Axle Load (ESAL), where an axle load is said to produce equal pavement wear to a number of applications of a reference axle load. The most well-known of such a LEF is the “fourth power law” which is expressed mathematically as follows: 
+\begin{equation}
+\frac{N_{ref}}{N_{x}}=\left(\frac{W_x}{W_{ref}}\right)^4
+\end{equation}
+Where:
+\begin{itemize}
+\item $W_x$ is the axle load taken into consideration;
+\item $W_{ref}$ is the reference axle load usually equal to the 18000 lb (80 kN) single axle load;
+\item $N_{ref}/N_{x}$ is the corresponding number of load applications. 
+\end{itemize}
+The formulation below, similar to the previous one, allows to calculate the ESAL of a vehicle summing each single axle ESAL
+\begin{equation}
+N_{esal}=\sum_{1}^{nr\:of\:axles}\left(\frac{W_{axle}}{W_{standard\:axle}}\right)^4
+\end{equation}
+Where:
+\begin{itemize}
+\item$W_{axle}$ and $W_{standard}$ axle corresponds to $W_x $and $W_{ref} $of the previous formula.
+\end{itemize}
+As an example, applying this formula we can calculate the ESAL of an average 1500 kg car and a 25000 kg rapid transit bus with 50\% passengers load mass and observe that the pavement damage caused by the bus is 8000 times higher than that of the car, as the ESAL of the bus is about 4 and the one of the car is only 0,0005.\\
+Referring to the ESAL calculation there are several other aspects that could be considerated in order to carry out a more specific analysis but they are not so relevant for the final result.\\
+The main ones are the roughness of the road, the vehicle speed, and all the elements and factors that affect the dynamic axle load, such as the mass and stiffness distribution, suspensions and tyres.\\
+Here below is shown an example of the effects of roughness and speed on ESAL.\\
+
+\begin{figure}[H]
+\centering
+\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth, height=3cm]{roadcons}}
+\caption{Effects of roughness and speed on ESAL.}
+\end{figure}
+
+These results indicate that ESAL is more sensitive to speed on fair pavement surfaces than on good pavement surfaces. This implies that vehicles potentially impose higher distresses on fair pavement when driven at relatively high speeds.\\
+It is interesting to that ESAL drops after a certain speed, particularly on fair and rough pavement surfaces. This can be explained in part by the fact that the dynamic wheel load is a power function of speed. This implies that there is a turning point at which ESAL would begin to decrease with increasing speed.\\
+Other aspects that influence the result are the effect of different axle combinations, such as tandem axles or tridem axles, that generally cannot be treated by summation of the effects of their constituting individual axles, and the number of tyres on each single axle.\\
+For example, tandem and tridem axles can carry much greater loads with little increase in pavement damage and changing from single tyres to dual tyres can decrease the pavement stress by 20\%.\\
+Once the ESAL factor has been calculated, it is possible find the ESAL per year of a road just by sum the ESALs of all the vechicle passing that road in one year. In the case of a heavy bus such as the ones considered for the BRT line in Kinshasa with about 6 ESALs and 600 runs per day the ESAL in one year would be approximately 1300000.\\
+By associating the ESAL value to the fatigue life, it is possible to predict and control the level of wear of the road over the years and calculate the maintenance and restoration costs of the road, avoiding pavement distresses like fatigue cracking or potholes.\cite{33}\cite{34}\cite{35}\cite{36}
+\newpage
+\section{Conclusions} %%%%section10
+This study provides a preliminary analysis of the feasibility of a rapid transit system in Kinshasa. To start, a general analysis of the socio-economic situation in DRC and Kinshasa has been performed: the main point is that despite the abundance of natural resources, DRC is an extremely poor country. Population is growing steadily and Kinshasa is the most densely populated town in Africa. The dire economic conditions impede the development of the transport system, which is currently road based and non-motorised. In spite of the significant role of roads in Kinshasa transportation network, only 10\% of them are paved. The state of railways is even weaker, as they are used mostly for freight. Kinshasa has a monopole organisation: the high-density business centre is located at the North and the low-density sprawl area extends all around it, which drives millions of people to commute from the suburban slums to the centre. Public transport is mainly informal, with the state-owned company the competition of hundreds of private run taxi-buses. In the past years, many plans were prepared in order to reorganise transportation in Kinshasa: namely, the main interventions suggested were the extensive reorganization and repaving of the road network, the upgrade of the existing rail lines to allow suburban rail services and the systematisation of the bus network with the introduction of BRT corridors. This study evaluates specifically one BRT corridor, from Ndjili airport to the Kitambo district, the section of railway line which runs from these two locations and a circular line, operating in the city centre.\\
+The main part of the analysis regarded the vehicles, which were evaluated both from the longitudinal dynamics point of view as well as from the vertical dynamics point of view, to obtain information over passenger comfort and road damage. The longitudinal dynamics of the vehicles was studied tacking into account the physical parameters of the vehicles and the performance of their subsystems, such as the engine or the retarder. Both ICE and electric vehicles were assessed, to understand the differences in their behaviour. Five articulated and four standard (12m) buses were tested, as well as one bi-modal EMU/DMU train. The comparison between ICE and electric buses did not suggest any significant difference in their behaviour, while the EMU performs slightly better than the DMU. It is also worth noting that, despite the greater distance between stations, trains have a lower commercial speed, probably owing to their limited acceleration. Besides, the vertical dynamics analysis returned that the suspensions are able to filter the road irregularity under all tested operating conditions, keeping vibration levels for passengers well below the limits suggested by ISO 2631 for the exposure time of BRT passengers.\\
+Knowing the travel time of vehicles, service planning and fleet sizing was performed. Demand was estimated from similar BRT corridors in Africa and the trip distribution along the day was extracted from the traffic surveys performed by JICA. For the BRT line, the minimum rides frequency is roughly 3,5 minutes, while the shorter headway is 53 seconds, fully compatible with BRT standards. The fleet size in the best case would be 65 vehicles, in the worst case it would be 93 vehicles. Regarding the railway line, 58 multiple units are necessary to operate rides every circa 3 minutes. For BRT also station sizing was made, in particular the airport station was completely dimensioned. Stations of BRTs are crucial in the designing of the line because are the places that connect people with the transportation system, given their importance they should be built respecting the environment and be well integrated into the city.\\
+Using the results obtained from the service planning section a brief economic analysis of the BRT line 1 was performed, first by analysing the infrastructure cost, considering the cost of a similar project in Africa, the BRT line of Lagos, built in 2010 and using a slightly bigger value of 2 million US dollars per kilometre. Then cost of the fleet was estimated, comparing a fleet of standard ICE buses with a one composed of electrical buses. The results are clear, the ICE buses fleet has way smaller initial costs but bigger maintenance costs than the electric fleet, but overall, considering 12 years of operation the total costs of an electric fleet are nearly double than the ICE fleet.\\
+ A brief environmental analysis was then performed to evaluate the impact of Green House Gas emissions from the BRT buses, in particular by comparing the ICE buses with the electric ones. Since electricity in DRC is produces mainly from renewable sources, the whole lifecycle of the batteries has been considered. The final result is that within 42 days of continuous operation an ICE bus equates the GHG emissions generated from the battery production, thus the climate impact of electric buses is extraordinarily reduced compared to ICE buses.\\
+In terms of signalling, it’s important to consider that the pedestrians have the priority on each street. The idealistic scenario would implement bridges and tunnels in intersections to decrease the lost time due to traffic lights and to have the best scenario for pedestrian safety, BRT flow and mixed traffic flow. But, since the solution is too expensive, the intersections would be managed by signals: the best solution would be the active signal priority, but, with the right calculation and assumptions, also the passive signal priority can be implemented (the convenience of one on another is not that relevant due to the high congestion).\\
+A road wear and pavement damage analysis were also conducted in order to evaluate the effect of vehicles such as heavy buses on the road surface. The ESAL factor was used to quantitatively estimate the damage: it is a parameter that allows to compare the damage caused by a single axle load to a standard or reference one. The ESAL value considers, in addition to the single axle load, other factors such as the roughness of the road, vehicle speed, stiffness distribution, tyres and axle combination which have a minor but still significant impact. Thanks to the calculation of the ESAL it is possible to estimate and predict the life cycle of a road and the level of wear and to evaluate the maintenance and restoration costs.\\
+
+To conclude, the final suggestion of this report is to implement an ICE bus BRT corridor. The suburban rail system has been excluded because of a list of reasons. The implementation of a piece of urban rail would require extensive high-tech infrastructural interventions, which despite the exceedingly high investment cost, would not bring advantages in terms of travel time and passenger capacity. In addition to the onerous initial investment, the rail line would operate close to its maximum capacity, preventing the activation of the second rail corridor to the south-west as well as direct services to the outer suburbs. A way to circumvent the problem of capacity could be using high-density double-decker trains, which, in order that performance is kept unaltered, need to be EMUs; however, electricity powered rail cannot be conceived at the moment, due to the weakness of the electric grid in DRC. The same applies to the use of electric buses: they have double the initial investment cost compared to ICE buses, despite not bringing significant operational advantages. The only benefit of electric buses would be the almost absence of GHG emissions. By contrast, ICE buses would not suffer from grid instability and would be more flexible in case of disruptions and route diversions. In the end, the adoption of ICE buses is the best solution to empower a fully functional and economically viable mass transportation system in Kinshasa, capable of spurring economic growth, social equality and, ultimately, a better quality of life.\\
+\newpage
+\begin{thebibliography}{99}
+\bibitem{worldbank0}
+\textit{https://data.worldbank.org/indicator/sp.pop.grow?most\_recent\_value\_desc=true}
+\bibitem{worldbank1}
+\textit{https://data.worldbank.org/?locations=ZG-CD}
+\bibitem{worldometers}
+\textit{https://www.worldometers.info/world-population/democratic-republic-of-the-congo-population}
+\bibitem{worldpupulation}
+\textit{https://worldpopulationreview.com/world-cities/kinshasa-population}
+\bibitem{gdp}
+\textit{https://worldpopulationreview.com/country-rankings/poorest-countries-in-africa}
+\bibitem{poverty}
+\textit{https://www.worldbank.org/en/country/drc/overview\#1}
+\bibitem{HCI}
+\textit{ https://data.worldbank.org/?locations=ZG-CD}
+\bibitem{japan}
+\textit{Project for Urban Transport Master Plan in Kinshasa City-PDTK-April 2019
+JAPAN INTERNATIONAL COOPERATION AGENCY (JICA)}
+\bibitem{africatransport}
+Ken Gwilliam, \textit{Africa’s Transport Infrastructure, Mainstreaming Maintenance and Management}
+\bibitem{osm}
+\textit{www.openstreetmap.com}
+\bibitem{ORM}
+\textit{www.openrailwaymap.org}
+\bibitem{air}
+\textit{“Service Statistique de la RVA” cited by “Annuaire statistique 2014 de la RDC”, 2015}
+\bibitem{irregularity1}
+\textit{https://doi.org/10.1016/j.ymssp.2018.07.035}
+\bibitem{irregularity2}
+\textit{https://doi.org/10.1016/j.compag.2019.05.001}
+\bibitem{marcopolo}
+\textit{https://www.facebook.com/TRANSCOofficiel/photos/pcb.2066288276853260/2066281273520627/}
+\bibitem{4}
+\textit{https://doi.org/10.1016/j.energy.2020.118241}
+\bibitem{5}
+\textit{https://doi.org/10.1016/j.apenergy.2018.08.086}
+\bibitem{6}
+\textit{https://www.facebook.com/TRANSCOofficiel/photos/pcb.2066288276853260/2066281273520627/}
+\bibitem{7}
+\textit{https://www.stadlerrail.com/media/pdf/warr0420e.pdf}
+\bibitem{8}
+Kwon, Hong.(2013).Aerodynamic Drag Reduction on High-performance EMU Train by Streamlined Shape Modification.
+\textit{journal of the Korean society for railway}
+\bibitem{9}
+\textit{https://doi.org/10.1080/13873954.2021.1887276}
+\bibitem{BRTsizing}
+R. Lowe, A.Frieslaar. BRT STATION CAPACITY ANALYSIS: OPTIMISING BUS RAPID TRANSIT STATION DESIGN THROUGH CAPACITY ANALYSIS
+\bibitem{tqdm}
+Transport Research Board Committee.(2013) \textit{Transit Capacity and Quality of Service Manual, Third edition}
+\bibitem{cobalt}
+Michael Davie.(2021).Blood Cobalt. \textit{ABC}
+\bibitem{cobalt1}
+Siyamend Al Barazi, Uwe Näher, Sebastian Vetter, Philip Schütte, Maren Liedtke,Matthias Baier, Gudrun Franken.(2017).
+COBALT FROM THE DR CONGO – POTENTIAL, RISKS AND SIGNIFICANCE FOR THE GLOBAL COBALT MARKET. \textit{Commodity TopNews}
+\bibitem{iea}
+\textit{https://www.iea.org/fuels-and-technologies/electricity}
+\bibitem{sdg}
+\textit{Tracking SDG7, 2019,The World Bank}
+\bibitem{40}
+Troy R. Hawkins, Bhawna Singh, Guillaume Majeau-Bettez, and Anders Hammer Strømman.(2012).Comparative Environmental Life Cycle Assessment of Conventional and Electric Vehicles. \textit{Journal of Industrial Ecology}
+\bibitem{nmc}
+Olumide Winjobi, Jarod C. Kelly, Qiang Dai.(2022).Life-cycle analysis, by global region, of automotive lithium-ion nickel manganese cobalt batteries of varying nickel content. \textit{Sustainable Materials and Technologies}
+\bibitem{life}
+Yuhan Lianga, Jing Sua,b, Beidou Xia,b,d, Yajuan Yuc, Danfeng Jia, Yuanyuan Suna, Chifei Cuia, Jianchao Zhua.(2016).Life cycle assessment of lithium-ion batteries for greenhouse gas emissions. \textit{Resources, Conservation and Recycling}
+\bibitem{diesel}
+\textit{https://www.nrcan.gc.ca/sites/www.nrcan.gc.ca/files/oee/pdf/transportation/fuel-efficient-technologies/autosmart\_factsheet\_6\_e.pdf}
+\bibitem{fleet}
+Neil Quarles, Kara M. Kockelman, and Moataz Mohamed.(2020).Costs and Benefits of Electrifying and Automating Bus Transit Fleets. \textit{Multidisciplinary Digital Publishing Institute}
+\bibitem{signalling}
+\textit{https://brtguide.itdp.org/branch/master/guide/intersections-and-signal-control/}
+\bibitem{33}
+Edward Fekpe. \textit{Pavement damage from transit buses and motor coaches}. Energy, Transportation, and Environment Division Battelle Memorial Institute
+\bibitem{34}
+How vehicle loads affect affect pavement performance. \textit{Wisconsin Transportation Bulletin}
+\bibitem{35}
+Mattias Hjort, Mattias Haraldsson, and Jan M. Jansen.(2008). \textit{Road wear from Heavy Vehicles-an overview}. Nordiska Vägteniska Förbundet committee Vehicles and Transports
+\bibitem{36}
+\textit{https://pavementinteractive.org/reference-desk/design/design-parameters/trucks-and-buses/}
+\end{thebibliography}
+\end{document}
